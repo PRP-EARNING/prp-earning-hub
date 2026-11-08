@@ -97,7 +97,7 @@ hr{border:1px solid #244d38}
 <h3>Deposit / Unlock Tasks</h3>
 
 <div class="notice">
-Notice: Before you Deposit money, refresh the deposit page to avoid sending money to your invitee.You must submit your deposit name and wait for admin approval before accessing available tasks.
+Notice: Before you deposit money, refresh the deposit page to avoid sending money to your invitee. You must submit your deposit name and wait for admin approval before accessing available tasks.
 Your tasks will remain locked until your payment is verified.
 </div>
 
@@ -121,11 +121,10 @@ Your tasks will remain locked until your payment is verified.
 <p id="DepositMessage" class="small"></p>
 
 <hr>
-<p>Contact Adminr:</p>
+<p>Contact Admin:</p>
 <h5 class="green">08072081438</h5>
-  <button onclick="Contact Admin()">Copy Number</button>
-  
-  
+<button onclick="copyAdminNumber()">Copy Number</button>
+
 <h3>My Deposit History</h3>
 <div id="DepositHistory">No deposit submissions yet.</div>
 </div>
@@ -174,6 +173,21 @@ Your tasks will remain locked until your payment is verified.
 
 <hr>
 <h3>Submitted Task Proofs</h3>
+
+<button onclick="clearReviewedSubmissions('approved')">
+Clear Approved Tasks
+</button>
+
+<button class="danger" onclick="clearReviewedSubmissions('rejected')">
+Clear Rejected Tasks
+</button>
+
+<button class="secondary" onclick="clearReviewedSubmissions('all')">
+Clear All Reviewed Tasks
+</button>
+
+<p class="small">Clearing affects only the admin dashboard. User history and balances are preserved.</p>
+
 <div id="submissionList"></div>
 
 <hr>
@@ -187,8 +201,6 @@ Your tasks will remain locked until your payment is verified.
 
 </section>
 </main>
-
-<!-- FIREBASE: NO STORAGE SCRIPT -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -405,7 +417,7 @@ loadWithdrawalHistory();
 if(name==="admin")loadAdmin();
 }
 
-/* TASKS - TEXT PROOF ONLY */
+/* TASKS */
 
 async function loadTasks(){
 const box=el("taskList");
@@ -469,7 +481,7 @@ box.textContent=e.message;
 }
 }
 
-/* SUBMIT TASK - NO IMAGE UPLOAD */
+/* SUBMIT TASK */
 
 async function submitTask(taskId,proof,button){
 
@@ -611,14 +623,20 @@ div.appendChild(btn);
 taskBox.appendChild(div);
 });
 
-/* ALL TASK SUBMISSIONS - TEXT ONLY */
+/* ALL TASK SUBMISSIONS */
 
 const subs=await db.collection("submissions").get();
 submissionBox.innerHTML="";
 
-if(subs.empty)submissionBox.textContent="No task submissions.";
+const visibleSubs=subs.docs.filter(d=>
+d.data().adminClearedFromDashboard!==true
+);
 
-subs.forEach(d=>{
+if(!visibleSubs.length){
+submissionBox.textContent="No task submissions.";
+}
+
+visibleSubs.forEach(d=>{
 const s=d.data();
 const div=document.createElement("div");
 div.className="item";
@@ -648,7 +666,7 @@ div.append(approve,reject);
 }else{
 
 const status=document.createElement("p");
-status.className="green";
+status.className=s.status==="approved"?"status-approved":"status-rejected";
 status.textContent=s.status==="approved"?"APPROVED":"REJECTED";
 div.appendChild(status);
 
@@ -663,6 +681,75 @@ await loadWithdrawalAdmin();
 }catch(e){
 taskBox.textContent=e.message;
 submissionBox.textContent=e.message;
+}
+}
+
+/* CLEAR APPROVED AND REJECTED TASKS */
+
+async function clearReviewedSubmissions(type){
+
+if(!isAdmin)return alert("Admin access required.");
+
+let statuses=[];
+
+if(type==="approved")statuses=["approved"];
+if(type==="rejected")statuses=["rejected"];
+if(type==="all")statuses=["approved","rejected"];
+
+if(!statuses.length)return;
+
+const label=type==="all"?
+"all approved and rejected tasks":
+type+" tasks";
+
+if(!confirm("Clear "+label+" from the admin dashboard?"))return;
+
+try{
+
+const box=el("submissionList");
+box.textContent="Clearing...";
+
+const snap=await db.collection("submissions").get();
+
+const docs=snap.docs.filter(d=>{
+const s=d.data();
+
+return statuses.includes(s.status)&&
+s.adminClearedFromDashboard!==true;
+});
+
+if(!docs.length){
+alert("No "+label+" found.");
+await loadAdmin();
+return;
+}
+
+/* FIRESTORE BATCH UPDATES */
+
+for(let i=0;i<docs.length;i+=450){
+
+const batch=db.batch();
+
+docs.slice(i,i+450).forEach(d=>{
+batch.update(d.ref,{
+adminClearedFromDashboard:true,
+adminClearedAt:firebase.firestore.FieldValue.serverTimestamp(),
+adminClearedBy:currentUser.uid
+});
+});
+
+await batch.commit();
+}
+
+alert("Successfully cleared "+docs.length+" task records from the admin dashboard.");
+
+await loadAdmin();
+
+}catch(e){
+
+alert("Could not clear tasks: "+e.message);
+await loadAdmin();
+
 }
 }
 
@@ -752,24 +839,30 @@ alert(e.message);
 }
 }
 
-/* DEPOSIT ACCOUNT */
+/* COPY ACCOUNT AND CONTACT */
 
-async function copyDepositAccount(){
-const account="9066506279";
-
+async function copyText(value,label){
 try{
 if(navigator.clipboard&&window.isSecureContext){
-await navigator.clipboard.writeText(account);
-alert("Account number copied.");
+await navigator.clipboard.writeText(value);
+alert(label+" copied.");
 }else{
-window.prompt("Copy account number:",account);
+window.prompt("Copy "+label+":",value);
 }
 }catch(e){
-window.prompt("Copy account number:",account);
+window.prompt("Copy "+label+":",value);
 }
 }
 
-/* SUBMIT DEPOSIT - SENDER NAME ONLY */
+async function copyDepositAccount(){
+await copyText("9037896575","Account number");
+}
+
+async function copyAdminNumber(){
+await copyText("08072081438","Admin number");
+}
+
+/* SUBMIT DEPOSIT */
 
 async function submitDeposit(){
 
@@ -805,10 +898,7 @@ status:"pending",
 createdAt:firebase.firestore.FieldValue.serverTimestamp()
 });
 
-message(
-"DepositMessage",
-"SUCCESS! Your deposit is now PENDING. Please wait for admin approval."
-);
+message("DepositMessage","SUCCESS! Your deposit is now PENDING. Please wait for admin approval.");
 
 el("DepositAmount").value="";
 el("SenderName").value="";
@@ -817,7 +907,6 @@ await loadDepositHistory();
 
 }catch(e){
 console.error("Deposit submission error:",e);
-
 message("DepositMessage","Submission failed: "+e.message);
 alert("Deposit submission failed: "+e.message);
 
@@ -870,7 +959,7 @@ box.textContent="Could not load deposit history: "+e.message;
 }
 }
 
-/* ADMIN DEPOSIT REVIEW - SENDER NAME */
+/* ADMIN DEPOSIT REVIEW */
 
 async function loadDepositAdmin(){
 if(!isAdmin)return;
@@ -923,16 +1012,7 @@ reject.className="danger";
 reject.textContent="Reject Deposit";
 reject.onclick=()=>reviewDeposit(d.id,"rejected",reject);
 
-div.append(
-heading,
-info,
-sender,
-status,
-warning,
-approve,
-reject
-);
-
+div.append(heading,info,sender,status,warning,approve,reject);
 box.appendChild(div);
 });
 
