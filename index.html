@@ -833,9 +833,9 @@ const user=await tx.get(userRef);if(!user.exists)throw new Error("User account n
 const total=Number(data.totalReturn)||0;
 const daily=Math.floor(total/days);
 const reward=claimed===days-1?total-daily*(days-1):daily;
-const newBalance=Number(user.data().demoInvestBalance||0)+reward;
+const newBalance=Number(user.data().InvestBalance||0)+reward;
 const newClaimed=claimed+1,newTotal=Number(data.claimedTotal||0)+reward;
-tx.update(userRef,{demoInvestBalance:newBalance});
+tx.update(userRef,{InvestBalance:newBalance});
 tx.update(invRef,{
 claimedDays:newClaimed,claimedTotal:newTotal,
 lastClaimAt:firebase.firestore.FieldValue.serverTimestamp(),
@@ -843,11 +843,11 @@ status:newClaimed>=days?"completed":"active",
 completedAt:newClaimed>=days?firebase.firestore.FieldValue.serverTimestamp():null
 });
 });
-await loadProfile();await loadInvestmentPage();alert("Demo reward added to your demo wallet. It cannot be withdrawn.");
-}catch(e){alert(e.message);button.disabled=false;button.textContent="Claim Demo Reward"}
+await loadProfile();await loadInvestmentPage();alert("reward added to your wallet.");
+}catch(e){alert(e.message);button.disabled=false;button.textContent="Claim Reward"}
 }
 
-/* ADMIN DEMO SETTINGS */
+/* ADMIN SETTINGS */
 async function loadAdminInvestmentSettings(){
 if(!isAdmin)return;
 await loadInvestmentSettings();
@@ -856,15 +856,15 @@ box.innerHTML="";
 investPackages.forEach((p,index)=>{
 const div=document.createElement("div");div.className="item";
 const heading=document.createElement("h3");heading.textContent=p.name+" • Package "+(index+1);
-const amount=document.createElement("input");amount.type="number";amount.min="1";amount.id="invAmount_"+p.id;amount.value=p.amount;amount.placeholder="Demo package amount";
+const amount=document.createElement("input");amount.type="number";amount.min="1";amount.id="invAmount_"+p.id;amount.value=p.amount;amount.placeholder="package amount";
 const total=document.createElement("input");total.type="number";total.min="0";total.id="invReturn_"+p.id;total.value=p.totalReturn;total.placeholder="Simulated total return";
 const days=document.createElement("input");days.type="number";days.min="1";days.max="365";days.id="invDays_"+p.id;days.value=p.days;days.placeholder="Duration in days";
-const label=document.createElement("p");label.className="small";label.textContent="Demo amount • Simulated return • Number of days";
+const label=document.createElement("p");label.className="small";label.textContent="amount • Simulated return • Number of days";
 div.append(heading,label,amount,total,days);box.appendChild(div);
 });
 const credit=document.createElement("div");credit.className="item";
-const label=document.createElement("label");label.textContent="Welcome demo credit (granted once after deposit approval)";
-const input=document.createElement("input");input.type="number";input.min="0";input.id="welcomeDemoCreditInput";input.value=welcomeDemoCredit;
+const label=document.createElement("label");label.textContent="Welcome invest credit (granted once after deposit approval)";
+const input=document.createElement("input");input.type="number";input.min="0";input.id="welcomeCreditInput";input.value=welcomeCredit;
 credit.append(label,input);box.appendChild(credit);
 }
 async function saveAdminInvestmentSettings(){
@@ -877,32 +877,32 @@ return message("investmentSettingsMessage","Enter valid amounts, returns and dur
 }
 updated.push({...p,amount,totalReturn,days});
 }
-const credit=Number(el("welcomeDemoCreditInput").value);
-if(!Number.isFinite(credit)||credit<0)return message("investmentSettingsMessage","Enter a valid welcome demo credit.");
+const credit=Number(el("welcomeCreditInput").value);
+if(!Number.isFinite(credit)||credit<0)return message("investmentSettingsMessage","Enter a valid welcome credit.");
 try{
-await db.collection("settings").doc("demoInvestment").set({
+await db.collection("settings").doc("Investment").set({
 packages:updated,welcomeCredit:credit,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentUser.uid
 },{merge:true});
-investPackages=updated;welcomeDemoCredit=credit;
+investPackages=updated;welcomeCredit=credit;
 message("investmentSettingsMessage","Investment settings saved. New investments will use the updated package settings.");
 await loadInvestmentPage();
 }catch(e){message("investmentSettingsMessage","Could not save: "+e.message)}
 }
 async function creditDemoWallet(){
-if(!isAdmin)return;
-const email=el("creditUserEmail").value.trim().toLowerCase(),amount=Number(el("creditDemoAmount").value);
-if(!email||!Number.isFinite(amount)||amount<=0)return message("demoCreditMessage","Enter a valid email and demo credit amount.");
+if(!isAdmin)return
+const email=el("creditUserEmail").value.trim().toLowerCase(),amount=Number(el("creditAmount").value);
+if(!email||!Number.isFinite(amount)||amount<=0)return message("CreditMessage","Enter a valid email and credit amount.");
 try{
 const snap=await db.collection("users").where("email","==",email).limit(1).get();
-if(snap.empty)return message("demoCreditMessage","No user found with that email.");
+if(snap.empty)return message("CreditMessage","No user found with that email.");
 const userDoc=snap.docs[0];
 await db.runTransaction(async tx=>{
 const u=await tx.get(userDoc.ref);if(!u.exists)throw new Error("User not found.");
-tx.update(userDoc.ref,{demoInvestBalance:Number(u.data().demoInvestBalance||0)+amount});
+tx.update(userDoc.ref,{InvestBalance:Number(u.data().InvestBalance||0)+amount});
 });
-message("demoCreditMessage","Demo wallet credited successfully. No cash was transferred.");
-el("creditUserEmail").value="";el("creditDemoAmount").value="";
-}catch(e){message("demoCreditMessage","Credit failed: "+e.message)}
+message("CreditMessage"," wallet credited successfully. No cash was transferred.");
+el("creditUserEmail").value="";el("creditAmount").value="";
+}catch(e){message("CreditMessage","Credit failed: "+e.message)}
 }
 </script>
 </body>
