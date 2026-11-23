@@ -747,16 +747,16 @@ await loadMyInvestments();
 }
 async function startDemoInvestment(packageId){
 if(!currentUser)return;
-if(!isAdmin&&myProfile.taskAccess!==true)return alert("Your demo investment feature is locked.");
+if(!isAdmin&&myProfile.taskAccess!==true)return alert("Your investment feature is locked.");
 const p=investPackages.find(x=>x.id===packageId);if(!p)return alert("Package not found.");
-if(!confirm("Start this simulated demo package using your demo wallet? No real money will be used."))return;
+if(!confirm("Start this Invest package using your  wallet."))return;
 try{
 const userRef=db.collection("users").doc(currentUser.uid),investmentRef=db.collection("investments").doc();
 await db.runTransaction(async tx=>{
 const u=await tx.get(userRef);if(!u.exists)throw new Error("User account not found.");
-const balance=Number(u.data().demoInvestBalance||0);
-if(balance<Number(p.amount))throw new Error("Not enough demo wallet balance. Ask the admin for demo credit if appropriate.");
-tx.update(userRef,{demoInvestBalance:balance-Number(p.amount)});
+const balance=Number(u.data().InvestBalance||0);
+if(balance<Number(p.amount))throw new Error("Not enough wallet balance.Go and Deposit to Fund your Wallet.");
+tx.update(userRef,{InvestBalance:balance-Number(p.amount)});
 tx.set(investmentRef,{
 userId:currentUser.uid,packageId:p.id,packageName:p.name,
 principal:Number(p.amount),totalReturn:Number(p.totalReturn),duration:Number(p.days),
