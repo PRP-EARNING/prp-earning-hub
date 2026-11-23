@@ -799,7 +799,7 @@ const percent=Math.min(100,(Number(v.claimedDays||0)/Math.max(1,Number(v.duratio
 const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("div");fill.style.width=percent+"%";bar.appendChild(fill);
 const last=getTimestampMillis(v.lastClaimAt)||getTimestampMillis(v.startAt);
 const remaining=last+86400000-Date.now();
-const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"Next demo claim: Available now":"Next claim in: "+formatRemaining(remaining);
+const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"claim: Available now":"Next claim in: "+formatRemaining(remaining);
 const claimed=document.createElement("p");claimed.textContent="rewards claimed: ₦"+money(v.claimedTotal||0);
 const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimDemoReward(v.id,btn);
 div.append(title,info,days,bar,claimed,timer,btn);activeBox.appendChild(div);
@@ -816,7 +816,7 @@ if(!activeBox.children.length)activeBox.textContent="No active investments.";
 if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";
 }catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent=e.message}
 }
-async function claimDemoReward(id,button){
+async function claimReward(id,button){
 if(!currentUser||button.disabled)return;
 button.disabled=true;button.textContent="Checking...";
 try{
@@ -900,7 +900,7 @@ await db.runTransaction(async tx=>{
 const u=await tx.get(userDoc.ref);if(!u.exists)throw new Error("User not found.");
 tx.update(userDoc.ref,{InvestBalance:Number(u.data().InvestBalance||0)+amount});
 });
-message("CreditMessage"," wallet credited successfully. No cash was transferred.");
+message("CreditMessage"," wallet credited successfully.cash was transferred.");
 el("creditUserEmail").value="";el("creditAmount").value="";
 }catch(e){message("CreditMessage","Credit failed: "+e.message)}
 }
