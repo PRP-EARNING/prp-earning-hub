@@ -215,16 +215,16 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 
 <section id="historyPage" class="card page-card hidden"><h3>My Task Activity</h3><div id="historyList"></div></section>
 
-<!-- DEMO INVESTMENT -->
+<!--  INVESTMENT -->
 <section id="investPage" class="card page-card hidden">
-<h3>Demo Investment Centre</h3>
-<div class="notice"><strong>DEMO ONLY:</strong> This is a simulated learning feature. Demo balances and simulated rewards have no cash value. They cannot be withdrawn, transferred or exchanged for money. Do not send money to use this feature.</div>
+<h3>Investment </h3>
+<div class="notice"><strong>INVEST ONLY:</strong> Invest and earn After 7 days.</div>
 <div class="admin-balance" style="margin-top:15px">
-<p class="small">YOUR DEMO INVESTMENT WALLET</p>
-<strong>₦<span id="demoInvestBalance">0</span></strong>
+<p class="small">YOUR INVESTMENT WALLET</p>
+<strong>₦<span id="InvestBalance">0</span></strong>
 </div>
 <p id="investAccessMessage" class="small"></p>
-<h3>Available Demo Packages</h3>
+<h3>Available Packages</h3>
 <div id="investmentPackages">Loading packages...</div>
 <hr><h3>My Active Investments</h3><div id="activeInvestments">Loading...</div>
 <hr><h3>Investment History</h3><div id="investmentHistory">Loading...</div>
@@ -248,8 +248,8 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <hr><h3>Withdrawal Requests</h3><div id="withdrawalAdminList"></div>
 
 <hr>
-<h3>Demo Investment Settings</h3>
-<p class="small">Change package investment amounts, simulated returns and duration. Changes apply to new demo investments only.</p>
+<h3>Investment Settings</h3>
+<p class="small">Change package investment. Changes apply to new investments only.</p>
 <div id="adminInvestmentSettings">Loading settings...</div>
 <button class="page-button" onclick="saveAdminInvestmentSettings()">Save Investment Settings</button>
 <p id="investmentSettingsMessage" class="small"></p>
@@ -258,8 +258,7 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <input id="creditUserEmail" type="email" placeholder="User email address">
 <input id="creditDemoAmount" type="number" min="1" placeholder="Demo credit amount">
 <button class="page-button" onclick="creditDemoWallet()">Credit Demo Wallet</button>
-<p class="small">This is demo credit only. It has no cash value and cannot be withdrawn.</p>
-<p id="demoCreditMessage" class="small"></p>
+<p id="CreditMessage" class="small"></p>
 </section>
 
 <div class="footer">PRP-EARNING HUB • Learn • Complete Tasks • Track Progress</div>
