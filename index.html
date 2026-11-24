@@ -254,10 +254,10 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <button class="page-button" onclick="saveAdminInvestmentSettings()">Save Investment Settings</button>
 <p id="investmentSettingsMessage" class="small"></p>
 <hr>
-<h3>Credit User Demo Wallet</h3>
+<h3>Credit User Wallet</h3>
 <input id="creditUserEmail" type="email" placeholder="User email address">
-<input id="creditDemoAmount" type="number" min="1" placeholder="Demo credit amount">
-<button class="page-button" onclick="creditDemoWallet()">Credit Demo Wallet</button>
+<input id="creditAmount" type="number" min="1" placeholder="credit amount">
+<button class="page-button" onclick="creditWallet()">Credit Wallet</button>
 <p id="CreditMessage" class="small"></p>
 </section>
 
@@ -888,7 +888,7 @@ message("investmentSettingsMessage","Investment settings saved. New investments 
 await loadInvestmentPage();
 }catch(e){message("investmentSettingsMessage","Could not save: "+e.message)}
 }
-async function creditDemoWallet(){
+async function creditWallet(){
 if(!isAdmin)return
 const email=el("creditUserEmail").value.trim().toLowerCase(),amount=Number(el("creditAmount").value);
 if(!email||!Number.isFinite(amount)||amount<=0)return message("CreditMessage","Enter a valid email and credit amount.");
