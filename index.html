@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,262 +6,125 @@
 <title>PRP-EARNING HUB</title>
 <style>
 *{box-sizing:border-box}
-:root{--bg:#07110d;--panel:#10251b;--panel2:#1a3024;--green:#20c978;--green2:#10a96a;--muted:#b9c9bf;--border:#244d38;--white:#fff}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--white)}
-button,input,textarea{font-family:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-.small{font-size:13px;color:var(--muted)}
-.green{color:var(--green)}
-.muted{color:var(--muted)}
+:root{--bg:#07110d;--panel:#10251b;--panel2:#1a3024;--green:#20c978;--muted:#b9c9bf;--border:#244d38}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#fff}
+button,input,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:12px;background:var(--green);color:#06140c;font-weight:bold}
+button:disabled{opacity:.55;cursor:not-allowed}
+input,textarea{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #45634f;background:#eaf3ed;color:#111}
+textarea{min-height:90px}.hidden{display:none!important}.small{font-size:13px;color:var(--muted)}.green{color:var(--green)}.muted{color:var(--muted)}
 hr{border:0;border-top:1px solid var(--border);margin:18px 0}
-#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(145deg,#07110d,#10251b)}
-.auth-card{width:100%;max-width:460px;background:#10251b;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 12px 35px #0005}
-.auth-banner{background:#163b2a;padding:32px 22px;text-align:center;border-bottom:3px solid var(--green)}
-.auth-banner h1{color:var(--green);margin:0;font-size:25px}
-.auth-banner p{color:var(--muted)}
-.auth-content{padding:23px}
-.auth-content h3{color:var(--green)}
-input,textarea{width:100%;padding:14px;margin:8px 0;border-radius:9px;border:1px solid #45634f;background:#eaf3ed;color:#111;font-size:15px}
-textarea{min-height:100px;resize:vertical}
-button{border:0;border-radius:9px;padding:13px;font-size:15px;font-weight:bold;background:var(--green);color:#06140c}
-button:disabled{opacity:.6;cursor:not-allowed}
-button.secondary{background:#263b30;color:white}
-button.danger{background:#b83232;color:white}
-button.outline{background:transparent;color:var(--green);border:1px solid var(--green)}
-.auth-content button{width:100%;margin:7px 0}
-.topbar{height:76px;background:#10251b;border-bottom:2px solid var(--green);display:flex;align-items:center;gap:14px;padding:0 18px;position:sticky;top:0;z-index:20}
-.menu-button{width:43px;height:43px;flex-shrink:0;font-size:24px;padding:0;background:transparent;color:white}
-.brand{flex:1;min-width:0}
-.brand h2{color:var(--green);font-size:19px;margin:0;white-space:nowrap}
-.brand span{font-size:11px;color:var(--muted)}
-.profile-circle{width:42px;height:42px;border-radius:50%;background:var(--green);color:#07110d;display:flex;align-items:center;justify-content:center;font-weight:bold}
-.sidebar-overlay{position:fixed;inset:0;background:#0009;z-index:29;display:none}
-.sidebar{position:fixed;top:0;bottom:0;left:0;width:280px;max-width:85%;background:#10251b;border-right:2px solid var(--green);z-index:30;padding:20px 14px;overflow-y:auto;transform:translateX(-105%);transition:.25s}
-.sidebar.open{transform:translateX(0)}
-.sidebar-overlay.open{display:block}
-.sidebar-head{display:flex;align-items:center;justify-content:space-between;padding:8px 5px 20px;border-bottom:1px solid var(--border)}
-.sidebar-head h2{color:var(--green);font-size:19px}
-.close-menu{width:36px;padding:7px;background:#263b30;color:white}
-.menu-label{color:#8ea99a;font-size:11px;font-weight:bold;letter-spacing:1.5px;margin:23px 10px 8px}
-.menu-link{width:100%;text-align:left;padding:14px 12px;margin:3px 0;color:#dce9e0;background:transparent;border-radius:9px;font-weight:normal}
-.menu-link:hover,.menu-link.active{background:#1d4933;color:var(--green)}
-.menu-link span{margin-right:10px}
-.app-layout{max-width:1100px;margin:auto;padding:15px}
-.page-heading{padding:12px 5px 18px;color:var(--muted);font-size:19px}
-.card{background:var(--panel);padding:18px;border-radius:14px;margin:13px 0;border:1px solid var(--border);box-shadow:0 5px 16px #0002}
-.card h3{color:var(--green);margin-top:5px}
-.dashboard-welcome{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.dashboard-welcome h2{color:var(--green);margin:5px 0}
-.balance-card{text-align:center;padding:28px 16px}
-.balance-number{font-size:39px;font-weight:bold;margin:14px 0 5px}
-.balance-label{color:var(--muted);font-size:15px}
-.balance-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
-.action-button{background:transparent;color:white;padding:8px 3px;font-weight:normal}
-.action-icon{width:65px;height:65px;border:2px solid var(--green);border-radius:50%;margin:0 auto 8px;display:flex;justify-content:center;align-items:center;color:var(--green);font-size:25px}
-.action-button span:last-child{font-size:13px}
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.quick-grid button{font-size:13px;padding:15px 5px}
-.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.section-heading h3{margin:5px 0}
-.item{background:var(--panel2);padding:14px;border-radius:10px;margin:10px 0;overflow-wrap:anywhere;border:1px solid #284b36}
-.item h3{margin:4px 0 10px}
-.item button{margin-top:7px}
-.notice{background:#263b30;padding:13px;border-radius:9px;color:#ffe49a;font-size:13px;line-height:1.6}
-.locked{background:#342d18;border:1px solid #a68b37;padding:16px;border-radius:10px;margin:10px 0}
-.status-pending{color:#ffe49a;font-weight:bold}
-.status-approved{color:var(--green);font-weight:bold}
-.status-rejected{color:#ff7777;font-weight:bold}
-.page-card{min-height:220px}
-.page-card>h3:first-child{margin-top:0}
-.page-button{width:100%;margin:7px 0}
-.admin-balance{border:1px solid var(--green);background:#163b2a;padding:17px;border-radius:12px;text-align:center}
-.admin-balance strong{color:var(--green);font-size:30px}
-.footer{text-align:center;color:#8da99a;font-size:12px;padding:25px 10px}
-.package-card{border:1px solid var(--green);background:#163b2a;padding:15px;border-radius:12px;margin:12px 0}
-.package-card h3{margin:4px 0 12px}
-.package-price{font-size:25px;color:var(--green);font-weight:bold}
-.demo-label{display:inline-block;background:#594b17;color:#ffe49a;padding:5px 9px;border-radius:6px;font-size:11px;font-weight:bold}
-.progress{height:9px;background:#263b30;border-radius:20px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:var(--green)}
-@media(min-width:700px){.app-layout{padding:22px}.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:start}.dashboard-grid .card{margin:0}}
-@media(max-width:420px){.brand h2{font-size:16px}.topbar{padding:0 12px}.balance-number{font-size:34px}.action-icon{width:55px;height:55px}.quick-grid{grid-template-columns:repeat(2,1fr)}}
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.auth-card,.card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:18px;margin:13px 0}
+.auth-card{width:100%;max-width:460px;padding:0;overflow:hidden}
+.auth-banner{text-align:center;background:#163b2a;padding:25px;border-bottom:3px solid var(--green)}
+.auth-banner h1,.card h3{color:var(--green)}
+.auth-content{padding:20px}.auth-content button{width:100%;margin:6px 0}
+.topbar{height:76px;background:#10251b;border-bottom:2px solid var(--green);display:flex;align-items:center;gap:13px;padding:0 15px;position:sticky;top:0;z-index:20}
+.menu-button{font-size:24px;background:transparent;color:white;padding:5px}.brand{flex:1}.brand h2{font-size:18px;color:var(--green);margin:0}.brand span{font-size:11px;color:var(--muted)}
+.profile-circle{width:42px;height:42px;border-radius:50%;background:var(--green);color:#07110d;display:grid;place-items:center;font-weight:bold}
+.sidebar-overlay{position:fixed;inset:0;background:#0009;z-index:29;display:none}.sidebar-overlay.open{display:block}
+.sidebar{position:fixed;top:0;bottom:0;left:0;width:280px;max-width:85%;background:#10251b;border-right:2px solid var(--green);z-index:30;padding:17px;overflow:auto;transform:translateX(-105%);transition:.2s}
+.sidebar.open{transform:translateX(0)}.sidebar-head{display:flex;justify-content:space-between;align-items:center}.sidebar-head h2{font-size:18px;color:var(--green)}
+.menu-label{font-size:11px;color:#8ea99a;font-weight:bold;margin:22px 8px 7px;letter-spacing:1px}
+.menu-link{display:block;width:100%;text-align:left;background:transparent;color:#dce9e0;font-weight:normal;margin:3px 0;padding:13px}
+.menu-link.active,.menu-link:hover{background:#1d4933;color:var(--green)}
+.app-layout{max-width:1100px;margin:auto;padding:14px}.page-heading{padding:12px 5px;color:var(--muted);font-size:19px}
+.balance-grid{display:grid;grid-template-columns:1fr;gap:12px}.wallet{background:#163b2a;border:1px solid var(--green);border-radius:13px;padding:20px;text-align:center}
+.wallet .amount{font-size:34px;font-weight:bold;color:var(--green);margin:12px 0}
+.notice{background:#263b30;padding:13px;border-radius:9px;color:#ffe49a;font-size:13px;line-height:1.5}
+.item,.package-card{background:var(--panel2);padding:14px;border-radius:10px;margin:10px 0;border:1px solid #284b36;overflow-wrap:anywhere}
+.package-card{background:#163b2a;border-color:var(--green)}.package-price{font-size:25px;color:var(--green);font-weight:bold}
+.item h3,.package-card h3{margin:4px 0 10px}.page-button{width:100%;margin:7px 0}
+.status-pending{color:#ffe49a}.status-approved{color:var(--green)}.status-rejected{color:#ff7777}
+.progress{height:9px;background:#263b30;border-radius:20px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:var(--green)}
+.footer{text-align:center;color:#8da99a;font-size:12px;padding:25px}
+@media(min-width:700px){.app-layout{padding:22px}.balance-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-
 <section id="auth">
-<div class="auth-card">
-<div class="auth-banner"><h1>PRP-EARNING HUB</h1><p>Learn • Complete Tasks • Track Progress</p></div>
-<div class="auth-content">
-<div id="loginBox">
-<h3>Welcome Back!</h3><p class="muted">Login to continue to PRP-EARNING HUB.</p>
-<input id="loginEmail" type="email" placeholder="Email address">
-<input id="loginPassword" type="password" placeholder="Password">
-<button id="loginButton" onclick="login()">Login</button>
-<p class="small">Don't have an account?</p>
-<button class="secondary" onclick="showSignup()">Create account</button>
-</div>
-<div id="signupBox" class="hidden">
-<h3>Create Account</h3>
-<input id="regName" placeholder="Full name">
-<input id="regEmail" type="email" placeholder="Email address">
-<input id="regPassword" type="password" placeholder="Create password">
-<button id="signupButton" onclick="signup()">Register</button>
-<button class="secondary" onclick="showLogin()">Back to login</button>
-</div>
-<p id="authMessage" class="small"></p>
-</div>
-</div>
+ <div class="auth-card">
+  <div class="auth-banner"><h1>PRP-EARNING HUB</h1><p>Learn • Complete Tasks • Track Progress</p></div>
+  <div class="auth-content">
+   <div id="loginBox"><h3>Welcome Back!</h3><input id="loginEmail" type="email" placeholder="Email address"><input id="loginPassword" type="password" placeholder="Password"><button id="loginButton" onclick="login()">Login</button><p class="small">Don't have an account?</p><button class="secondary" onclick="showSignup()">Create account</button></div>
+   <div id="signupBox" class="hidden"><h3>Create Account</h3><input id="regName" placeholder="Full name"><input id="regEmail" type="email" placeholder="Email address"><input id="regPassword" type="password" placeholder="Create password"><button id="signupButton" onclick="signup()">Register</button><button class="secondary" onclick="showLogin()">Back to login</button></div>
+   <p id="authMessage" class="small"></p>
+  </div>
+ </div>
 </section>
 
 <section id="dashboard" class="hidden">
-<div class="topbar">
-<button class="menu-button" onclick="toggleMenu()">☰</button>
-<div class="brand"><h2>PRP-EARNING HUB</h2><span>Earn • Complete Tasks • Track Progress</span></div>
-<div class="profile-circle" id="topInitial">P</div>
-</div>
-<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeMenu()"></div>
-<aside id="sidebar" class="sidebar">
-<div class="sidebar-head"><h2>PRP-EARNING HUB</h2><button class="close-menu" onclick="closeMenu()">✕</button></div>
-<div class="menu-label">MENU</div>
-<button class="menu-link active" data-page="dashboardHome" onclick="page('dashboardHome')"><span>▦</span> Dashboard</button>
-<div class="menu-label">EARN</div>
-<button class="menu-link" data-page="tasks" onclick="page('tasks')"><span>✓</span> Perform Tasks</button>
-<button class="menu-link" data-page="invest" onclick="page('invest')"><span>📈</span> Invest</button>
-<div class="menu-label">WALLETS</div>
-<button class="menu-link" data-page="Deposit" onclick="page('Deposit')"><span>＋</span> Payment / Deposit</button>
-<button class="menu-link" data-page="withdraw" onclick="page('withdraw')"><span>↗</span> Withdraw</button>
-<button class="menu-link" data-page="history" onclick="page('history')"><span>▤</span> History</button>
-<div class="menu-label">PERSONAL</div>
-<button class="menu-link" data-page="profile" onclick="page('profile')"><span>◉</span> Profile</button>
-<div id="adminMenuGroup" class="hidden">
-<div class="menu-label">ADMINISTRATION</div>
-<button class="menu-link" data-page="admin" onclick="page('admin')"><span>⚙</span> Admin Dashboard</button>
-</div>
-<hr><button class="menu-link" onclick="logout()"><span>⇥</span> Logout</button>
-</aside>
+ <div class="topbar"><button class="menu-button" onclick="toggleMenu()">☰</button><div class="brand"><h2>PRP-EARNING HUB</h2><span>Earn • Complete Tasks • Track Progress</span></div><div class="profile-circle" id="topInitial">P</div></div>
+ <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeMenu()"></div>
+ <aside id="sidebar" class="sidebar">
+  <div class="sidebar-head"><h2>PRP-EARNING HUB</h2><button onclick="closeMenu()">✕</button></div>
+  <div class="menu-label">MENU</div>
+  <button class="menu-link active" data-page="dashboardHome" onclick="page('dashboardHome')">▦ Dashboard</button>
+  <div class="menu-label">EARN</div>
+  <button class="menu-link" data-page="tasks" onclick="page('tasks')">✓ Perform Tasks</button>
+  <button class="menu-link" data-page="invest" onclick="page('invest')">📈 Invest</button>
+  <div class="menu-label">WALLETS</div>
+  <button class="menu-link" data-page="Deposit" onclick="page('Deposit')">＋ Payment / Deposit</button>
+  <button class="menu-link" data-page="withdraw" onclick="page('withdraw')">↗ Withdraw</button>
+  <button class="menu-link" data-page="history" onclick="page('history')">▤ History</button>
+  <div class="menu-label">PERSONAL</div>
+  <button class="menu-link" data-page="profile" onclick="page('profile')">◉ Profile</button>
+  <div id="adminMenuGroup" class="hidden"><div class="menu-label">ADMINISTRATION</div><button class="menu-link" data-page="admin" onclick="page('admin')">⚙ Admin Dashboard</button></div>
+  <hr><button class="menu-link" onclick="logout()">⇥ Logout</button>
+ </aside>
+ <main class="app-layout">
+  <div class="page-heading" id="pageHeading">Dashboard</div>
+  <section id="dashboardHomePage">
+   <div class="card"><p class="small">WELCOME BACK</p><h2 class="green" id="welcome">Welcome</h2><p id="taskAccessStatus" class="small"></p></div>
+   <div class="balance-grid">
+    <div class="wallet"><div class="muted">DEPOSIT BALANCE</div><div class="amount">₦<span id="depositBalance">0</span></div><p class="small">Approved deposits available for package purchases.</p><button onclick="page('Deposit')">Add Deposit</button></div>
+    <div class="wallet"><div class="muted">INVESTMENT BALANCE</div><div class="amount">₦<span id="InvestBalance">0</span></div><p class="small">Investment principal and simulated rewards. Not a withdrawable cash balance.</p><button onclick="page('invest')">View Investments</button></div>
+   </div>
+   <div class="card"><h3>Quick Actions</h3><button onclick="page('tasks')">Tasks</button> <button onclick="page('Deposit')">Deposit</button> <button onclick="page('invest')">Invest</button> <button onclick="page('withdraw')">Withdraw task earnings</button></div>
+   <div class="card"><h3>Account Information</h3><p id="dashboardAccessText" class="green"></p></div>
+  </section>
 
-<main class="app-layout">
-<div class="page-heading" id="pageHeading">Dashboard</div>
+  <section id="tasksPage" class="card hidden"><h3>Available Tasks</h3><div id="taskList">Loading tasks...</div></section>
 
-<section id="dashboardHomePage">
-<div class="card">
-<div class="dashboard-welcome">
-<div><p class="small">WELCOME BACK</p><h2 id="welcome">Welcome</h2></div>
-<div class="profile-circle" id="welcomeInitial">P</div>
-</div>
-<p id="taskAccessStatus" class="small"></p>
-</div>
-<div class="card balance-card">
-<div class="balance-label">Available Balance (NGN)</div>
-<div class="balance-number">₦<span id="balance">0</span></div>
-<div class="balance-actions">
-<button class="action-button" onclick="page('tasks')"><span class="action-icon">☑</span><span>Perform Tasks</span></button>
-<button class="action-button" onclick="page('Deposit')"><span class="action-icon">⊕</span><span>Payment</span></button>
-<button class="action-button" onclick="page('history')"><span class="action-icon">▤</span><span>History</span></button>
-</div>
-</div>
-<div class="card">
-<h3>Quick Actions</h3>
-<div class="quick-grid">
-<button onclick="page('tasks')">✓ Tasks</button><button onclick="page('Deposit')">＋ Payment</button>
-<button onclick="page('withdraw')">↗ Withdraw</button><button onclick="page('invest')">📈 Invest</button>
-<button onclick="page('profile')">◉ Profile</button><button onclick="page('history')">▤ History</button>
-<button class="secondary" onclick="logout()">Logout</button>
-</div>
-</div>
-<div class="card"><h3>Available Tasks</h3><p class="small">View available tasks, read instructions and submit your proof.</p><button class="page-button" onclick="page('tasks')">View Available Tasks →</button></div>
-<div class="card"><h3>Account Information</h3><p class="small">Your task access and deposit approval status are shown here.</p><p id="dashboardAccessText" class="green"></p><button class="secondary page-button" onclick="page('Deposit')">View Payment Details</button></div>
-</section>
+  <section id="DepositPage" class="card hidden">
+   <h3>Deposit / Fund Deposit Balance</h3>
+   <div class="notice">Submit your sender name and wait for admin verification. Only deposits confirmed in the receiving account should be approved. Approved deposits are added to Deposit Balance, not Investment Balance.</div>
+   <h3>Payment Details</h3><p>Deposit amount: <strong>As instructed by admin</strong></p><p>Bank: <strong>Momo PSB</strong></p><p>Account number:</p><h2 class="green">0884321892</h2><p>Account name: <strong>Patience</strong></p>
+   <button class="page-button" onclick="copyDepositAccount()">Copy Account Number</button>
+   <hr><h3>Submit Deposit</h3><input id="DepositAmount" type="number" min="1" placeholder="Amount deposited (₦)"><input id="SenderName" placeholder="Sender's full name"><button id="DepositSubmitButton" class="page-button" onclick="submitDeposit()">Submit Deposit for Approval</button><p id="DepositMessage" class="small"></p>
+   <p>Contact Admin: <strong>08072081438</strong></p><button class="secondary" onclick="copyAdminNumber()">Copy Admin Number</button>
+   <hr><h3>My Deposit History</h3><div id="DepositHistory">No deposit submissions yet.</div>
+  </section>
 
-<section id="tasksPage" class="card page-card hidden"><h3>Available Tasks</h3><div id="taskList">Loading tasks...</div></section>
+  <section id="investPage" class="card hidden">
+   <h3>Investment Packages</h3>
+   <div class="notice">Package amounts are transferred from Deposit Balance when a package is started. Any displayed returns are simulations only, not guaranteed payments or withdrawable cash.</div>
+   <div class="wallet" style="margin-top:12px"><p class="small">INVESTMENT BALANCE</p><div class="amount">₦<span id="investBalancePage">0</span></div></div>
+   <p id="investAccessMessage" class="small"></p><h3>Available Packages</h3><div id="investmentPackages">Loading packages...</div>
+   <hr><h3>My Active Investments</h3><div id="activeInvestments">Loading...</div>
+   <hr><h3>Investment History</h3><div id="investmentHistory">Loading...</div>
+  </section>
 
-<section id="DepositPage" class="card page-card hidden">
-<h3>Deposit / Unlock Tasks</h3>
-<div class="notice">Submit your sender name and wait for admin approval before accessing available tasks. Approval should only happen after actual payment verification.</div>
-<h3>Payment Details</h3>
-<p>Deposit Amount: <strong>₦1500</strong></p><p>Bank: <strong>Momo PSB</strong></p>
-<p>Account Number:</p><h2 class="green">0884321892</h2>
-<p>Account Name: <strong>Patience</strong></strong></p>
-<button class="page-button" onclick="copyDepositAccount()">Copy Account Number</button>
-<hr><h3>Submit Deposit</h3>
-<input id="DepositAmount" type="number" min="1" placeholder="Amount deposited (₦)">
-<label class="small">Sender Name</label><input id="SenderName" type="text" placeholder="Enter sender's full name">
-<button id="DepositSubmitButton" class="page-button" onclick="submitDeposit()">Submit Deposit for Approval</button>
-<p id="DepositMessage" class="small"></p>
-<hr><p>Contact Admin:</p><h3>08072081438</h3><button class="secondary page-button" onclick="copyAdminNumber()">Copy Number</button>
-<h3>My Deposit History</h3><div id="DepositHistory">No deposit submissions yet.</div>
-</section>
+  <section id="withdrawPage" class="card hidden">
+   <h3>Withdraw Task Earnings</h3><p>Available task earnings: ₦<strong id="withdrawBalance">0</strong></p>
+   <div class="notice">Only approved task earnings are shown here. Deposit Balance and simulated investment figures cannot be withdrawn through this page.</div>
+   <input id="withdrawAmount" type="number" min="1000" placeholder="Withdrawal amount (minimum ₦1000)"><input id="withdrawBank" placeholder="Bank name"><input id="withdrawAccountName" placeholder="Account name"><input id="withdrawAccountNumber" inputmode="numeric" maxlength="10" placeholder="10-digit account number">
+   <button id="withdrawButton" class="page-button" onclick="requestWithdrawal()">Submit Withdrawal Request</button><p id="withdrawMessage" class="small"></p><hr><h3>My Withdrawal History</h3><div id="withdrawHistory"></div>
+  </section>
 
-<section id="withdrawPage" class="card page-card hidden">
-<h2>Withdraw Funds</h2><h3>Minimum withdraw is ₦1000</h3>
-<p>Available balance: ₦<strong id="withdrawBalance">0</strong></p>
-<input id="withdrawAmount" type="number" min="1" placeholder="Withdrawal amount">
-<input id="withdrawBank" placeholder="Bank name"><input id="withdrawAccountName" placeholder="Account name">
-<input id="withdrawAccountNumber" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit account number">
-<button id="withdrawButton" class="page-button" onclick="requestWithdrawal()">Submit Withdrawal Request</button>
-<p id="withdrawMessage" class="small"></p>
-<div class="notice">Withdrawal requests are reviewed by the admin. Payment is made separately by bank transfer.</div>
-<hr><h3>My Withdrawal History</h3><div id="withdrawHistory">No withdrawal requests yet.</div>
-</section>
+  <section id="historyPage" class="card hidden"><h3>My Task Activity</h3><div id="historyList"></div></section>
+  <section id="profilePage" class="card hidden"><h3>My Profile</h3><p id="profileEmail" class="small"></p><input id="profileName" placeholder="Full name"><button class="page-button" onclick="saveProfile()">Save Profile</button></section>
 
-<section id="profilePage" class="card page-card hidden">
-<h3>My Profile</h3><p id="profileEmail" class="small"></p>
-<label class="small">Full name</label><input id="profileName" placeholder="Full name">
-<button class="page-button" onclick="saveProfile()">Save Profile</button>
-</section>
-
-<section id="historyPage" class="card page-card hidden"><h3>My Task Activity</h3><div id="historyList"></div></section>
-
-<!--  INVESTMENT -->
-<section id="investPage" class="card page-card hidden">
-<h3>Investment </h3>
-<div class="notice"><strong>INVEST ONLY:</strong> Invest and earn After 7 days.</div>
-<div class="admin-balance" style="margin-top:15px">
-<p class="small">YOUR INVESTMENT WALLET</p>
-<strong>₦<span id="InvestBalance">0</span></strong>
-</div>
-<p id="investAccessMessage" class="small"></p>
-<h3>Available Packages</h3>
-<div id="investmentPackages">Loading packages...</div>
-<hr><h3>My Active Investments</h3><div id="activeInvestments">Loading...</div>
-<hr><h3>Investment History</h3><div id="investmentHistory">Loading...</div>
-</section>
-
-<section id="adminPage" class="card page-card hidden">
-<h3>Dashboard</h3><p class="small">Admin access is checked using your Firebase UID.</p>
-<div class="admin-balance"><p class="small">BALANCE</p><strong>₦821,538</strong></div>
-<hr><h3>Post New Task</h3>
-<input id="newTaskTitle" placeholder="Task title"><textarea id="newTaskDescription" placeholder="Task instructions"></textarea>
-<input id="newTaskReward" type="number" min="0" placeholder="Task reward (₦)">
-<button class="page-button" onclick="postTask()">Publish Task</button>
-<hr><h3>Manage Tasks</h3><div id="adminTasks"></div>
-<hr><h3>Submitted Task Proofs</h3>
-<button class="page-button" onclick="clearReviewedSubmissions('approved')">Clear Approved Tasks</button>
-<button class="danger page-button" onclick="clearReviewedSubmissions('rejected')">Clear Rejected Tasks</button>
-<button class="secondary page-button" onclick="clearReviewedSubmissions('all')">Clear All Reviewed Tasks</button>
-<p class="small">Clearing affects only the admin dashboard. User history, balances and submitted-task records are preserved.</p>
-<div id="submissionList"></div>
-<hr><h3>Deposits to Review</h3><div id="depositAdminList"></div>
-<hr><h3>Withdrawal Requests</h3><div id="withdrawalAdminList"></div>
-
-<hr>
-<h3>Investment Settings</h3>
-<p class="small">Change package investment. Changes apply to new investments only.</p>
-<div id="adminInvestmentSettings">Loading settings...</div>
-<button class="page-button" onclick="saveAdminInvestmentSettings()">Save Investment Settings</button>
-<p id="investmentSettingsMessage" class="small"></p>
-<hr>
-<h3>Credit User Demo Wallet</h3>
-<input id="creditUserEmail" type="email" placeholder="User email address">
-<input id="creditDemoAmount" type="number" min="1" placeholder="Demo credit amount">
-<button class="page-button" onclick="creditDemoWallet()">Credit Demo Wallet</button>
-<p id="CreditMessage" class="small"></p>
-</section>
-
-<div class="footer">PRP-EARNING HUB • Learn • Complete Tasks • Track Progress</div>
-</main>
+  <section id="adminPage" class="card hidden">
+   <h3>Admin Dashboard</h3><p class="small">Admin access is checked using your Firebase UID.</p>
+   <hr><h3>Post New Task</h3><input id="newTaskTitle" placeholder="Task title"><textarea id="newTaskDescription" placeholder="Task instructions"></textarea><input id="newTaskReward" type="number" min="0" placeholder="Task reward (₦)"><button class="page-button" onclick="postTask()">Publish Task</button>
+   <hr><h3>Manage Tasks</h3><div id="adminTasks"></div><hr><h3>Submitted Task Proofs</h3><div id="submissionList"></div>
+   <hr><h3>Deposits to Review</h3><div id="depositAdminList"></div>
+   <hr><h3>Withdrawal Requests</h3><div id="withdrawalAdminList"></div>
+   <hr><h3>Investment Package Settings</h3><div id="adminInvestmentSettings"></div><button class="page-button" onclick="saveAdminInvestmentSettings()">Save Package Settings</button><p id="investmentSettingsMessage" class="small"></p>
+  </section>
+  <div class="footer">PRP-EARNING HUB • Learn • Complete Tasks • Track Progress</div>
+ </main>
 </section>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -270,19 +132,18 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig={
-apiKey:"AIzaSyC6O2RSO27tCfq4F8qkyijAdgsIqZrlmVk",
-authDomain:"pj-earning-hub.firebaseapp.com",
-projectId:"pj-earning-hub",
-storageBucket:"pj-earning-hub.firebasestorage.app",
-messagingSenderId:"470981481788",
-appId:"1:470981481788:web:c1eeb9a0a2844d8804ba39",
-measurementId:"G-TL488P4PES"
+ apiKey:"AIzaSyC6O2RSO27tCfq4F8qkyijAdgsIqZrlmVk",
+ authDomain:"pj-earning-hub.firebaseapp.com",
+ projectId:"pj-earning-hub",
+ storageBucket:"pj-earning-hub.firebasestorage.app",
+ messagingSenderId:"470981481788",
+ appId:"1:470981481788:web:c1eeb9a0a2844d8804ba39",
+ measurementId:"G-TL488P4PES"
 };
 if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(),db=firebase.firestore();
 const ADMIN_UID="FDTfk3CWHUcccM6LEeVbFUG7MRx1";
-let currentUser=null,isAdmin=false,myProfile={};
-let welcomeDemoCredit=100;
+let currentUser=null,isAdmin=false,myProfile={},countdownTimer=null;
 let investPackages=[
 {id:"normal2000",name:"Normal Package",amount:2000,totalReturn:3600,days:7},
 {id:"normal5000",name:"Normal Package",amount:5000,totalReturn:8500,days:7},
@@ -290,619 +151,217 @@ let investPackages=[
 {id:"mega10000",name:"Mega Package",amount:10000,totalReturn:18000,days:7},
 {id:"mega20000",name:"Mega Package",amount:20000,totalReturn:29000,days:7}
 ];
-let countdownTimer=null;
-function el(id){return document.getElementById(id)}
-function message(id,text){el(id).textContent=text}
-function money(value){return Number(value||0).toLocaleString("en-NG")}
-function safeNumber(v,def=0){const n=Number(v);return Number.isFinite(n)?n:def}
-
-/* MENU */
-function toggleMenu(){el("sidebar").classList.toggle("open");el("sidebarOverlay").classList.toggle("open")}
-function closeMenu(){el("sidebar").classList.remove("open");el("sidebarOverlay").classList.remove("open")}
-
-/* AUTHENTICATION */
-function showSignup(){el("loginBox").classList.add("hidden");el("signupBox").classList.remove("hidden");message("authMessage","")}
-function showLogin(){el("signupBox").classList.add("hidden");el("loginBox").classList.remove("hidden");message("authMessage","")}
+const $=id=>document.getElementById(id);
+const money=v=>Number(v||0).toLocaleString("en-NG");
+const stamp=v=>v&&typeof v.toMillis==="function"?v.toMillis():(v&&v.seconds?v.seconds*1000:0);
+function msg(id,t){$(id).textContent=t}
+function toggleMenu(){$("sidebar").classList.toggle("open");$("sidebarOverlay").classList.toggle("open")}
+function closeMenu(){$("sidebar").classList.remove("open");$("sidebarOverlay").classList.remove("open")}
+function showSignup(){$("loginBox").classList.add("hidden");$("signupBox").classList.remove("hidden");msg("authMessage","")}
+function showLogin(){$("signupBox").classList.add("hidden");$("loginBox").classList.remove("hidden");msg("authMessage","")}
 async function signup(){
-const name=el("regName").value.trim(),email=el("regEmail").value.trim(),password=el("regPassword").value;
-if(!name||!email||password.length<6){message("authMessage","Enter your details correctly. Password must have at least 6 characters.");return}
-const btn=el("signupButton");btn.disabled=true;btn.textContent="Creating account...";
-try{
-const result=await auth.createUserWithEmailAndPassword(email,password);
-await db.collection("users").doc(result.user.uid).set({
-name,email,demoPoints:0,taskAccess:false,demoInvestBalance:0,demoInvestWelcomeGranted:false,
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-message("authMessage","Account created successfully. Make a deposit to unlock tasks.");
-}catch(e){message("authMessage",e.message)}
-finally{btn.disabled=false;btn.textContent="Register"}
+ const name=$("regName").value.trim(),email=$("regEmail").value.trim(),password=$("regPassword").value;
+ if(!name||!email||password.length<6)return msg("authMessage","Enter your details. Password must be at least 6 characters.");
+ const b=$("signupButton");b.disabled=true;
+ try{const r=await auth.createUserWithEmailAndPassword(email,password);await db.collection("users").doc(r.user.uid).set({name,email,demoPoints:0,depositBalance:0,InvestBalance:0,taskAccess:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg("authMessage","Account created.")}
+ catch(e){msg("authMessage",e.message)}finally{b.disabled=false}
 }
 async function login(){
-const email=el("loginEmail").value.trim(),password=el("loginPassword").value;
-if(!email||!password){message("authMessage","Enter your email address and password.");return}
-const btn=el("loginButton");btn.disabled=true;btn.textContent="Logging in...";
-try{await auth.signInWithEmailAndPassword(email,password);message("authMessage","")}
-catch(e){message("authMessage",e.message)}
-finally{btn.disabled=false;btn.textContent="Login"}
+ const email=$("loginEmail").value.trim(),password=$("loginPassword").value;if(!email||!password)return msg("authMessage","Enter your email and password.");
+ const b=$("loginButton");b.disabled=true;try{await auth.signInWithEmailAndPassword(email,password)}catch(e){msg("authMessage",e.message)}finally{b.disabled=false}
 }
-function logout(){closeMenu();auth.signOut().catch(e=>alert(e.message))}
-
-/* AUTH STATE */
+function logout(){closeMenu();auth.signOut()}
 auth.onAuthStateChanged(async user=>{
-currentUser=user;
-if(!user){isAdmin=false;myProfile={};el("auth").classList.remove("hidden");el("dashboard").classList.add("hidden");if(countdownTimer)clearInterval(countdownTimer);return}
-isAdmin=user.uid===ADMIN_UID;
-el("auth").classList.add("hidden");el("dashboard").classList.remove("hidden");
-el("adminMenuGroup").classList.toggle("hidden",!isAdmin);
-try{
-await loadInvestmentSettings();
-await loadProfile();
-await loadTasks();
-await loadHistory();
-await loadDepositHistory();
-await loadWithdrawalHistory();
-if(isAdmin)await loadAdmin();
-page("dashboardHome");
-}catch(e){console.error(e)}
+ currentUser=user;
+ if(!user){isAdmin=false;myProfile={};$("auth").classList.remove("hidden");$("dashboard").classList.add("hidden");if(countdownTimer)clearInterval(countdownTimer);return}
+ isAdmin=user.uid===ADMIN_UID;$("auth").classList.add("hidden");$("dashboard").classList.remove("hidden");$("adminMenuGroup").classList.toggle("hidden",!isAdmin);
+ try{await loadProfile();await loadInvestmentSettings();await loadTasks();await loadHistory();await loadDepositHistory();await loadWithdrawalHistory();if(isAdmin)await loadAdmin();page("dashboardHome")}
+ catch(e){console.error(e);alert("Some account information could not load: "+e.message)}
 });
-
-/* PROFILE */
 async function loadProfile(){
-if(!currentUser)return;
-const ref=db.collection("users").doc(currentUser.uid);
-let snap=await ref.get();
-if(!snap.exists){
-await ref.set({
-name:currentUser.displayName||currentUser.email||"User",email:currentUser.email||"",
-demoPoints:0,taskAccess:false,InvestBalance:0,InvestWelcomeGranted:false,
-createdAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-snap=await ref.get();
+ if(!currentUser)return;
+ const ref=db.collection("users").doc(currentUser.uid);let s=await ref.get();
+ if(!s.exists){await ref.set({name:currentUser.displayName||"User",email:currentUser.email||"",demoPoints:0,depositBalance:0,InvestBalance:0,taskAccess:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});s=await ref.get()}
+ myProfile=s.data()||{};
+ $("welcome").textContent="Welcome, "+(myProfile.name||"User");$("profileEmail").textContent=currentUser.email||"";$("profileName").value=myProfile.name||"";
+ $("topInitial").textContent=(myProfile.name||"P").charAt(0).toUpperCase();
+ $("depositBalance").textContent=money(myProfile.depositBalance);$("InvestBalance").textContent=money(myProfile.InvestBalance);$("investBalancePage").textContent=money(myProfile.InvestBalance);
+ $("withdrawBalance").textContent=money(myProfile.demoPoints);
+ const access=isAdmin||myProfile.taskAccess===true,txt=access?"Task access: UNLOCKED":"Task access: LOCKED — deposit approval required.";
+ $("taskAccessStatus").textContent=txt;$("dashboardAccessText").textContent=txt;
 }
-myProfile=snap.data()||{};
-const name=myProfile.name||"User";
-el("welcome").textContent="Welcome, "+name;
-el("balance").textContent=money(isAdmin?21000:(myProfile.Points||0));
-el("profileEmail").textContent=currentUser.email||"";
-el("profileName").value=name;
-el("topInitial").textContent=name.charAt(0).toUpperCase();
-el("welcomeInitial").textContent=name.charAt(0).toUpperCase();
-updateTaskAccessStatus();
-}
-function updateTaskAccessStatus(){
-const unlocked=isAdmin||myProfile.taskAccess===true;
-const text=unlocked?"Task access: UNLOCKED":"Task access: LOCKED - Deposit approval required.";
-el("taskAccessStatus").textContent=text;
-el("dashboardAccessText").textContent=text;
-el("taskAccessStatus").className=unlocked?"green":"small";
-}
-async function saveProfile(){
-const name=el("profileName").value.trim();if(!name)return alert("Enter your name.");
-try{await db.collection("users").doc(currentUser.uid).set({name},{merge:true});await loadProfile();alert("Profile updated.")}
-catch(e){alert(e.message)}
-}
-
-/* PAGE NAVIGATION */
+async function saveProfile(){const name=$("profileName").value.trim();if(!name)return alert("Enter your name.");try{await db.collection("users").doc(currentUser.uid).update({name});await loadProfile();alert("Profile updated.")}catch(e){alert(e.message)}}
 function page(name){
-const pages=["dashboardHomePage","tasksPage","DepositPage","withdrawPage","profilePage","historyPage","adminPage","investPage"];
-pages.forEach(id=>el(id).classList.add("hidden"));
-if(name==="admin"&&!isAdmin)return;
-const ids={dashboardHome:"dashboardHomePage",tasks:"tasksPage",Deposit:"DepositPage",withdraw:"withdrawPage",profile:"profilePage",history:"historyPage",admin:"adminPage",invest:"investPage"};
-if(!ids[name])return;
-el(ids[name]).classList.remove("hidden");
-const titles={dashboardHome:"Analytics",tasks:"Perform Tasks",Deposit:"Payment / Deposit",withdraw:"Withdraw",profile:"My Profile",history:"History",admin:"Admin Dashboard",invest:"Demo Investment"};
-el("pageHeading").textContent=titles[name]||"Dashboard";
-document.querySelectorAll(".menu-link[data-page]").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===name));
-closeMenu();
-if(name==="tasks")loadTasks();
-if(name==="history")loadHistory();
-if(name==="Deposit")loadDepositHistory();
-if(name==="withdraw"){el("withdrawBalance").textContent=money(myProfile.Points||0);loadWithdrawalHistory()}
-if(name==="admin")loadAdmin();
-if(name==="invest")loadInvestmentPage();
+ const ids={dashboardHome:"dashboardHomePage",tasks:"tasksPage",Deposit:"DepositPage",withdraw:"withdrawPage",history:"historyPage",profile:"profilePage",admin:"adminPage",invest:"investPage"};
+ Object.values(ids).forEach(id=>$(id).classList.add("hidden"));if(name==="admin"&&!isAdmin)return;if(!ids[name])return;
+ $(ids[name]).classList.remove("hidden");$("pageHeading").textContent=({dashboardHome:"Dashboard",tasks:"Perform Tasks",Deposit:"Payment / Deposit",withdraw:"Withdraw",history:"History",profile:"My Profile",admin:"Admin Dashboard",invest:"Investment"})[name];
+ document.querySelectorAll(".menu-link[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===name));closeMenu();
+ if(name==="tasks")loadTasks();if(name==="history")loadHistory();if(name==="Deposit")loadDepositHistory();if(name==="withdraw"){loadProfile();loadWithdrawalHistory()}if(name==="admin")loadAdmin();if(name==="invest")loadInvestmentPage();
 }
+async function copyText(t,label){try{await navigator.clipboard.writeText(t);alert(label+" copied.")}catch(e){prompt("Copy "+label,t)}}
+function copyDepositAccount(){copyText("0884321892","Account number")}
+function copyAdminNumber(){copyText("08072081438","Admin number")}
 
-/* TASKS */
-async function loadTasks(){
-const box=el("taskList");box.innerHTML="";
-if(!currentUser){box.textContent="Please log in first.";return}
-if(!isAdmin&&myProfile.taskAccess!==true){
-box.innerHTML='<div class="locked"><h3>🔒 Tasks Locked</h3><p>You need to make a deposit before accessing available tasks.</p><p>Your deposit must be verified and approved by the administrator.</p><p class="small">After approval, your tasks will automatically unlock.</p><button onclick="page(\'Deposit\')">Make Deposit to Unlock Tasks</button></div>';return
-}
-box.textContent="Loading tasks...";
-try{
-const results=await Promise.all([db.collection("tasks").orderBy("createdAt","desc").get(),db.collection("submissions").where("userId","==",currentUser.uid).get()]);
-const tasks=results[0],submissions=results[1],submittedTaskIds=new Set();
-submissions.forEach(d=>{const s=d.data();if(s.taskId)submittedTaskIds.add(s.taskId)});
-box.innerHTML="";let count=0;
-for(const doc of tasks.docs){
-if(submittedTaskIds.has(doc.id))continue;
-const t=doc.data(),div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=t.title||"Task";
-const desc=document.createElement("p");desc.textContent=t.description||"";
-const reward=document.createElement("p");reward.textContent="Reward: ₦"+money(t.reward);
-const proof=document.createElement("textarea");proof.placeholder="Enter task proof";
-const btn=document.createElement("button");btn.textContent="Submit Task";btn.onclick=()=>submitTask(doc.id,proof.value,btn);
-div.append(title,desc,reward,proof,btn);box.appendChild(div);count++;
-}
-if(!count)box.innerHTML='<div class="item"><h3>No available tasks</h3><p>You have already submitted all available tasks, or no new tasks have been posted.</p><p class="small">Your submitted tasks will not return after refreshing or logging in again.</p></div>';
-}catch(e){box.textContent="Could not load tasks: "+e.message}
-}
-async function submitTask(taskId,proof,button){
-if(!isAdmin&&myProfile.taskAccess!==true)return alert("Your tasks are locked. Deposit and wait for admin approval.");
-if(!proof.trim())return alert("Enter your proof first.");
-if(button.disabled)return;
-button.disabled=true;button.textContent="Submitting...";
-try{
-const previous=await db.collection("submissions").where("userId","==",currentUser.uid).get();
-if(previous.docs.some(d=>d.data().taskId===taskId)){alert("You have already submitted this task.");await loadTasks();return}
-const taskRef=db.collection("tasks").doc(taskId),taskSnap=await taskRef.get();
-if(!taskSnap.exists)throw new Error("This task is no longer available.");
-const task=taskSnap.data(),submissionRef=db.collection("submissions").doc(currentUser.uid+"_"+taskId);
-await db.runTransaction(async tx=>{
-const existing=await tx.get(submissionRef);
-if(existing.exists)throw new Error("You have already submitted this task.");
-tx.set(submissionRef,{taskId,taskTitle:task.title||"Task",taskDescription:task.description||"",taskReward:Number(task.reward)||0,userId:currentUser.uid,email:currentUser.email||"",proof:proof.trim(),status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-});
-alert("Task proof submitted successfully for admin review.");await loadHistory();await loadTasks();button.textContent="Submitted";
-}catch(e){alert(e.message);button.disabled=false;button.textContent="Submit Task"}
-}
-async function loadHistory(){
-if(!currentUser)return;const box=el("historyList");box.textContent="Loading...";
-try{
-const snap=await db.collection("submissions").where("userId","==",currentUser.uid).get();box.innerHTML="";
-snap.forEach(d=>{
-const s=d.data(),div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=s.taskTitle||("Task ID: "+s.taskId);
-const desc=document.createElement("p");desc.textContent=s.taskDescription||"Task details unavailable for this older submission.";
-const reward=document.createElement("p");reward.textContent="Reward: ₦"+money(s.taskReward);
-const proof=document.createElement("p");proof.textContent="Your proof: "+(s.proof||"");
-const status=document.createElement("p");status.textContent="Status: "+String(s.status||"pending").toUpperCase();
-status.className=s.status==="approved"?"status-approved":s.status==="rejected"?"status-rejected":"status-pending";
-div.append(title,desc,reward,proof,status);box.appendChild(div);
-});
-if(!box.children.length)box.textContent="No activity yet.";
-}catch(e){box.textContent=e.message}
-}
-
-/* ADMIN TASK MANAGEMENT */
-async function postTask(){
-if(!isAdmin)return;
-const title=el("newTaskTitle").value.trim(),description=el("newTaskDescription").value.trim(),reward=Number(el("newTaskReward").value);
-if(!title||!description||!Number.isFinite(reward)||reward<0)return alert("Fill all task details correctly.");
-try{
-await db.collection("tasks").add({title,description,reward,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-el("newTaskTitle").value="";el("newTaskDescription").value="";el("newTaskReward").value="";
-alert("Task published.");await loadTasks();await loadAdmin();
-}catch(e){alert(e.message)}
-}
-async function loadAdmin(){
-if(!isAdmin)return;
-const taskBox=el("adminTasks"),submissionBox=el("submissionList");
-taskBox.textContent="Loading...";submissionBox.textContent="Loading...";
-try{
-const tasks=await db.collection("tasks").get(),taskDetails={};
-tasks.forEach(d=>taskDetails[d.id]=d.data());
-taskBox.innerHTML="";
-if(tasks.empty)taskBox.textContent="No tasks posted.";
-tasks.forEach(d=>{
-const div=document.createElement("div");div.className="item";div.textContent=(d.data().title||"Task")+" ";
-const btn=document.createElement("button");btn.className="danger";btn.textContent="Delete Task";
-btn.onclick=async()=>{if(confirm("Delete this task?")){try{await db.collection("tasks").doc(d.id).delete();await loadAdmin();await loadTasks()}catch(e){alert(e.message)}}};
-div.appendChild(btn);taskBox.appendChild(div);
-});
-const subs=await db.collection("submissions").get();submissionBox.innerHTML="";
-const visible=subs.docs.filter(d=>d.data().adminClearedFromDashboard!==true);
-if(!visible.length)submissionBox.textContent="No task submissions.";
-visible.forEach(d=>{
-const s=d.data(),div=document.createElement("div");div.className="item";
-const info=document.createElement("p"),task=taskDetails[s.taskId]||{};
-info.textContent="User: "+s.email+"\nTask Name: "+(s.taskTitle||task.title||s.taskId)+"\nDescription: "+(s.taskDescription||task.description||"Not available")+"\nReward: ₦"+money(s.taskReward!==undefined?s.taskReward:task.reward)+"\nStatus: "+s.status+"\nProof: "+s.proof;
-info.style.whiteSpace="pre-wrap";div.appendChild(info);
-if(s.status==="pending"){
-const approve=document.createElement("button");approve.textContent="Approve Task";approve.onclick=()=>approveProof(d.id,s,approve);
-const reject=document.createElement("button");reject.textContent="Reject Task";reject.className="danger";reject.onclick=()=>rejectProof(d.id,reject);
-div.append(approve,reject);
-}else{
-const status=document.createElement("p");status.className=s.status==="approved"?"status-approved":"status-rejected";status.textContent=s.status==="approved"?"APPROVED":"REJECTED";div.appendChild(status);
-}
-submissionBox.appendChild(div);
-});
-await loadDepositAdmin();await loadWithdrawalAdmin();await loadAdminInvestmentSettings();
-}catch(e){taskBox.textContent=e.message;submissionBox.textContent=e.message}
-}
-async function clearReviewedSubmissions(type){
-if(!isAdmin)return alert("Admin access required.");
-let statuses=[];if(type==="approved")statuses=["approved"];if(type==="rejected")statuses=["rejected"];if(type==="all")statuses=["approved","rejected"];
-if(!statuses.length)return;
-const label=type==="all"?"all approved and rejected tasks":type+" tasks";
-if(!confirm("Clear "+label+" from the admin dashboard?"))return;
-try{
-const box=el("submissionList");box.textContent="Clearing...";
-const snap=await db.collection("submissions").get();
-const docs=snap.docs.filter(d=>statuses.includes(d.data().status)&&d.data().adminClearedFromDashboard!==true);
-if(!docs.length){alert("No "+label+" found.");await loadAdmin();return}
-for(let i=0;i<docs.length;i+=450){
-const batch=db.batch();
-docs.slice(i,i+450).forEach(d=>batch.update(d.ref,{adminClearedFromDashboard:true,adminClearedAt:firebase.firestore.FieldValue.serverTimestamp(),adminClearedBy:currentUser.uid}));
-await batch.commit();
-}
-alert("Successfully cleared "+docs.length+" task records from the admin dashboard.");await loadAdmin();
-}catch(e){alert("Could not clear tasks: "+e.message);await loadAdmin()}
-}
-async function approveProof(id,s,button){
-if(!isAdmin||button.disabled)return;button.disabled=true;button.textContent="Processing...";
-try{
-const submissionRef=db.collection("submissions").doc(id),taskRef=db.collection("tasks").doc(s.taskId),userRef=db.collection("users").doc(s.userId);
-await db.runTransaction(async tx=>{
-const sub=await tx.get(submissionRef);
-if(!sub.exists||sub.data().status!=="pending")throw new Error("This task has already been handled.");
-const user=await tx.get(userRef);if(!user.exists)throw new Error("User account not found.");
-let reward;
-if(typeof sub.data().taskReward==="number")reward=sub.data().taskReward;
-else{const task=await tx.get(taskRef);if(!task.exists)throw new Error("Original task and saved reward are unavailable.");reward=Number(task.data().reward)||0}
-const balance=Number(user.data().demoPoints)||0;
-tx.update(submissionRef,{status:"approved",approvedAt:firebase.firestore.FieldValue.serverTimestamp()});
-tx.update(userRef,{demoPoints:balance+reward});
-});
-button.textContent="APPROVED";alert("Task approved. Reward added once.");await loadAdmin();await loadProfile();await loadHistory();await loadTasks();
-}catch(e){button.disabled=false;button.textContent="Approve Task";alert(e.message)}
-}
-async function rejectProof(id,button){
-if(!isAdmin)return;if(!confirm("Reject this task proof?"))return;button.disabled=true;
-try{
-const ref=db.collection("submissions").doc(id);
-await db.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists||snap.data().status!=="pending")throw new Error("Already handled.");tx.update(ref,{status:"rejected",reviewedAt:firebase.firestore.FieldValue.serverTimestamp()})});
-await loadAdmin();await loadHistory();await loadTasks();
-}catch(e){button.disabled=false;alert(e.message)}
-}
-
-/* COPY DETAILS */
-async function copyText(value,label){
-try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);alert(label+" copied.")}else window.prompt("Copy "+label+":",value)}
-catch(e){window.prompt("Copy "+label+":",value)}
-}
-async function copyDepositAccount(){await copyText("0884321892","Account number")}
-async function copyAdminNumber(){await copyText("08072081438","Admin number")}
-
-/* DEPOSITS */
+/* Deposits: approval credits Deposit Balance only. No automatic investment credit. */
 async function submitDeposit(){
-if(!currentUser)return alert("Please log in first.");
-const amount=Number(el("DepositAmount").value),senderName=el("SenderName").value.trim(),btn=el("DepositSubmitButton");
-if(!Number.isFinite(amount)||amount<=0)return alert("Enter the amount deposited.");
-if(!senderName)return alert("Enter the sender's name.");
-if(btn.disabled)return;
-btn.disabled=true;btn.textContent="Submitting...";message("DepositMessage","Submitting your deposit...");
-try{
-await db.collection("deposits").add({userId:currentUser.uid,email:currentUser.email||"",amount,senderName,status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-message("DepositMessage","SUCCESS! Your deposit is now PENDING. Please wait for admin approval.");
-el("DepositAmount").value="";el("SenderName").value="";await loadDepositHistory();
-}catch(e){message("DepositMessage","Submission failed: "+e.message);alert("Deposit submission failed: "+e.message)}
-finally{btn.disabled=false;btn.textContent="Submit Deposit for Approval"}
+ const amount=Number($("DepositAmount").value),senderName=$("SenderName").value.trim(),b=$("DepositSubmitButton");
+ if(!Number.isFinite(amount)||amount<=0)return alert("Enter a valid deposit amount.");if(!senderName)return alert("Enter the sender's name.");if(b.disabled)return;
+ b.disabled=true;b.textContent="Submitting...";
+ try{await db.collection("deposits").add({userId:currentUser.uid,email:currentUser.email||"",amount,senderName,status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()});msg("DepositMessage","Deposit submitted and pending admin verification.");$("DepositAmount").value="";$("SenderName").value="";await loadDepositHistory()}
+ catch(e){msg("DepositMessage","Submission failed: "+e.message)}finally{b.disabled=false;b.textContent="Submit Deposit for Approval"}
 }
 async function loadDepositHistory(){
-if(!currentUser)return;const box=el("DepositHistory");box.textContent="Loading...";
-try{
-const snap=await db.collection("deposits").where("userId","==",currentUser.uid).get();box.innerHTML="";
-snap.forEach(d=>{
-const p=d.data(),div=document.createElement("div");div.className="item";
-const info=document.createElement("p");
-info.textContent="Amount: ₦"+money(p.amount)+" | Sender: "+(p.senderName||"Not provided")+" | Status: "+String(p.status||"pending").toUpperCase();
-info.className=p.status==="pending"?"status-pending":p.status==="approved"?"status-approved":"status-rejected";
-div.appendChild(info);box.appendChild(div);
-});
-if(!box.children.length)box.textContent="No deposit submissions yet.";
-}catch(e){box.textContent="Could not load deposit history: "+e.message}
+ if(!currentUser)return;const box=$("DepositHistory");box.textContent="Loading...";
+ try{const s=await db.collection("deposits").where("userId","==",currentUser.uid).get();box.innerHTML="";s.forEach(d=>{const p=d.data(),x=document.createElement("div");x.className="item";x.textContent="₦"+money(p.amount)+" • "+(p.senderName||"")+" • "+String(p.status||"pending").toUpperCase();x.classList.add(p.status==="approved"?"status-approved":p.status==="rejected"?"status-rejected":"status-pending");box.append(x)});if(!box.children.length)box.textContent="No deposit submissions yet."}
+ catch(e){box.textContent="Could not load deposit history: "+e.message}
 }
 async function loadDepositAdmin(){
-if(!isAdmin)return;const box=el("depositAdminList");box.textContent="Loading deposits...";
-try{
-const snap=await db.collection("deposits").where("status","==","pending").get();box.innerHTML="";
-if(snap.empty){box.textContent="No pending deposits.";return}
-snap.forEach(d=>{
-const p=d.data(),div=document.createElement("div");div.className="item";
-const heading=document.createElement("h3");heading.textContent="PENDING DEPOSIT";
-const info=document.createElement("p");info.textContent="User: "+(p.email||p.userId)+" | Amount: ₦"+money(p.amount);
-const sender=document.createElement("p");sender.textContent="Sender Name: "+(p.senderName||"Not provided");
-const status=document.createElement("p");status.className="status-pending";status.textContent="Status: PENDING";
-const warning=document.createElement("p");warning.className="small";warning.textContent="Verify the actual payment in your bank account before approving.";
-const approve=document.createElement("button");approve.textContent="Approve Deposit & Unlock Tasks";approve.onclick=()=>reviewDeposit(d.id,"approved",approve);
-const reject=document.createElement("button");reject.className="danger";reject.textContent="Reject Deposit";reject.onclick=()=>reviewDeposit(d.id,"rejected",reject);
-div.append(heading,info,sender,status,warning,approve,reject);box.appendChild(div);
-});
-}catch(e){box.textContent="Could not load deposits: "+e.message}
+ const box=$("depositAdminList");box.textContent="Loading...";
+ try{const s=await db.collection("deposits").where("status","==","pending").get();box.innerHTML="";if(s.empty)box.textContent="No pending deposits.";
+ s.forEach(d=>{const p=d.data(),x=document.createElement("div");x.className="item";const t=document.createElement("p");t.textContent="User: "+p.email+" | Amount: ₦"+money(p.amount)+" | Sender: "+p.senderName;const warn=document.createElement("p");warn.className="small";warn.textContent="Verify the money actually arrived before approving.";const a=document.createElement("button");a.textContent="Approve Deposit";a.onclick=()=>reviewDeposit(d.id,"approved",a);const r=document.createElement("button");r.className="danger";r.textContent="Reject";r.onclick=()=>reviewDeposit(d.id,"rejected",r);x.append(t,warn,a,r);box.append(x)})}
+ catch(e){box.textContent=e.message}
 }
-async function reviewDeposit(id,status,button){
-if(!isAdmin)return;
-if(status==="approved"&&!confirm("Have you independently confirmed that this deposit arrived in your account?"))return;
-if(button.disabled)return;button.disabled=true;button.textContent="Processing...";
-try{
-await loadInvestmentSettings();
-const depositRef=db.collection("deposits").doc(id);
-await db.runTransaction(async tx=>{
-const snap=await tx.get(depositRef);
-if(!snap.exists||snap.data().status!=="pending")throw new Error("This deposit has already been reviewed.");
-const deposit=snap.data(),userRef=db.collection("users").doc(deposit.userId),userSnap=await tx.get(userRef);
-if(!userSnap.exists)throw new Error("User account not found.");
-if(status==="approved"){
-const userData=userSnap.data(),updates={taskAccess:true,taskAccessApprovedAt:firebase.firestore.FieldValue.serverTimestamp()};
-if(userData.InvestWelcomeGranted!==true){
-updates.InvestBalance=Number(userData.InvestBalance||0)+welcomeDemoCredit;
-updates.InvestWelcomeGranted=true;
-updates.InvestWelcomeGrantedAt=firebase.firestore.FieldValue.serverTimestamp();
-}
-tx.update(userRef,updates);
-}
-tx.update(depositRef,{status,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid});
-});
-alert(status==="approved"?"Deposit approved. Tasks unlocked and welcome demo credit granted if eligible.":"Deposit rejected.");
-await loadDepositAdmin();await loadDepositHistory();await loadProfile();await loadTasks();
-}catch(e){button.disabled=false;button.textContent=status==="approved"?"Approve Deposit & Unlock Tasks":"Reject Deposit";alert(e.message)}
+async function reviewDeposit(id,status,b){
+ if(!isAdmin)return;if(status==="approved"&&!confirm("Have you verified that this payment arrived?"))return;b.disabled=true;
+ try{const ref=db.collection("deposits").doc(id);await db.runTransaction(async tx=>{const d=await tx.get(ref);if(!d.exists||d.data().status!=="pending")throw Error("Deposit already reviewed.");const p=d.data(),uRef=db.collection("users").doc(p.userId),u=await tx.get(uRef);if(!u.exists)throw Error("User not found.");const changes={status,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid};if(status==="approved"){changes.verifiedAmount=Number(p.amount);tx.update(uRef,{depositBalance:Number(u.data().depositBalance||0)+Number(p.amount),taskAccess:true,taskAccessApprovedAt:firebase.firestore.FieldValue.serverTimestamp()})}tx.update(ref,changes)});await loadDepositAdmin();await loadDepositHistory();await loadProfile();await loadTasks();alert("Deposit "+status+".")}
+ catch(e){alert(e.message);b.disabled=false}
 }
 
-/* WITHDRAWALS */
-async function requestWithdrawal(){
-if(!currentUser)return;
-const amount=Number(el("withdrawAmount").value),bank=el("withdrawBank").value.trim(),accountName=el("withdrawAccountName").value.trim(),accountNumber=el("withdrawAccountNumber").value.trim();
-if(!Number.isFinite(amount)||amount<1000)return alert("Minimum withdrawal is ₦1000.");
-if(!bank||!accountName||!accountNumber)return alert("Complete your bank details.");
-if(!/^\d{10}$/.test(accountNumber))return alert("Enter a valid 10-digit account number.");
-const button=el("withdrawButton");if(button.disabled)return;button.disabled=true;button.textContent="Submitting...";
-try{
-const userRef=db.collection("users").doc(currentUser.uid),snap=await userRef.get();
-if(!snap.exists)throw new Error("User account not found.");
-const balance=Number(snap.data().demoPoints)||0;if(amount>balance)throw new Error("Insufficient balance.");
-await db.collection("withdrawals").add({userId:currentUser.uid,email:currentUser.email||"",amount,bank,accountName,accountNumber,status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-message("withdrawMessage","Withdrawal request submitted successfully.");
-el("withdrawAmount").value="";el("withdrawBank").value="";el("withdrawAccountName").value="";el("withdrawAccountNumber").value="";
-await loadWithdrawalHistory();
-}catch(e){alert(e.message)}
-finally{button.disabled=false;button.textContent="Submit Withdrawal Request"}
-}
-async function loadWithdrawalHistory(){
-if(!currentUser)return;const box=el("withdrawHistory");box.textContent="Loading...";
-try{
-const snap=await db.collection("withdrawals").where("userId","==",currentUser.uid).get();box.innerHTML="";
-snap.forEach(d=>{
-const w=d.data(),div=document.createElement("div");div.className="item";
-const info=document.createElement("p");info.textContent="Amount: ₦"+money(w.amount)+" | Bank: "+w.bank+" | Status: "+String(w.status||"pending").toUpperCase();
-info.className=w.status==="approved"?"status-approved":w.status==="rejected"?"status-rejected":"status-pending";
-div.appendChild(info);box.appendChild(div);
-});
-if(!box.children.length)box.textContent="No withdrawal requests yet.";
-}catch(e){box.textContent=e.message}
-}
-async function loadWithdrawalAdmin(){
-if(!isAdmin)return;const box=el("withdrawalAdminList");box.textContent="Loading...";
-try{
-const snap=await db.collection("withdrawals").where("status","==","pending").get();box.innerHTML="";
-if(snap.empty){box.textContent="No pending withdrawal requests.";return}
-snap.forEach(d=>{
-const w=d.data(),div=document.createElement("div");div.className="item";
-const info=document.createElement("p");info.textContent="User: "+w.email+" | Amount: ₦"+money(w.amount)+" | Bank: "+w.bank+" | Account name: "+w.accountName+" | Account number: "+w.accountNumber;
-const warning=document.createElement("p");warning.className="small";warning.textContent="Verify that the transfer has actually been completed before approving.";
-const approve=document.createElement("button");approve.textContent="Approve Withdrawal";approve.onclick=()=>approveWithdrawal(d.id,approve);
-const reject=document.createElement("button");reject.textContent="Reject Withdrawal";reject.className="danger";reject.onclick=()=>rejectWithdrawal(d.id,reject);
-div.append(info,warning,approve,reject);box.appendChild(div);
-});
-}catch(e){box.textContent=e.message}
-}
-async function approveWithdrawal(id,button){
-if(!isAdmin)return;if(!confirm("Have you successfully transferred this money to the user's bank account?"))return;
-button.disabled=true;button.textContent="Processing...";
-try{
-const ref=db.collection("withdrawals").doc(id);
-await db.runTransaction(async tx=>{
-const w=await tx.get(ref);if(!w.exists||w.data().status!=="pending")throw new Error("This withdrawal has already been processed.");
-const userRef=db.collection("users").doc(w.data().userId),u=await tx.get(userRef);if(!u.exists)throw new Error("User account not found.");
-const amount=Number(w.data().amount),balance=Number(u.data().demoPoints)||0;
-if(!Number.isFinite(amount)||amount<=0||amount>balance)throw new Error("Insufficient available balance.");
-tx.update(userRef,{demoPoints:balance-amount});
-tx.update(ref,{status:"approved",reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid});
-});
-alert("Withdrawal approved. Balance deducted once.");await loadWithdrawalAdmin();await loadProfile();await loadWithdrawalHistory();
-}catch(e){button.disabled=false;button.textContent="Approve Withdrawal";alert(e.message)}
-}
-async function rejectWithdrawal(id,button){
-if(!isAdmin)return;if(!confirm("Reject this withdrawal request?"))return;button.disabled=true;
-try{
-const ref=db.collection("withdrawals").doc(id);
-await db.runTransaction(async tx=>{const snap=await tx.get(ref);if(!snap.exists||snap.data().status!=="pending")throw new Error("Already processed.");tx.update(ref,{status:"rejected",reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid})});
-alert("Withdrawal request rejected.");await loadWithdrawalAdmin();await loadWithdrawalHistory();
-}catch(e){button.disabled=false;alert(e.message)}
-}
-
-/*  INVESTMENT SETTINGS */
+/* Investments: purchase moves amount from Deposit Balance into the investment ledger. */
 async function loadInvestmentSettings(){
-try{
-const snap=await db.collection("settings").doc("Investment").get();
-if(snap.exists){
-const data=snap.data();
-if(Array.isArray(data.packages)){
-const valid=data.packages.filter(p=>p&&typeof p.id==="string"&&Number(p.amount)>0&&Number(p.totalReturn)>=0&&Number(p.days)>0);
-if(valid.length)investPackages=valid;
-}
-if(Number.isFinite(Number(data.welcomeCredit))&&Number(data.welcomeCredit)>=0)welcomeDemoCredit=Number(data.welcomeCredit);
-}
-}catch(e){console.warn("Using default investment settings:",e.message)}
+ try{const s=await db.collection("settings").doc("Investment").get();if(s.exists&&Array.isArray(s.data().packages)){const valid=s.data().packages.filter(p=>p&&typeof p.id==="string"&&Number(p.amount)>0&&Number(p.totalReturn)>=0&&Number(p.days)>0);if(valid.length)investPackages=valid}}
+ catch(e){console.warn("Using default package settings",e.message)}
 }
 async function loadInvestmentPage(){
-if(!currentUser)return;
-await loadInvestmentSettings();
-const balance=Number(myProfile.InvestBalance||0);
-el("InvestBalance").textContent=money(balance);
-const unlocked=isAdmin||myProfile.taskAccess===true;
-el("investAccessMessage").textContent=unlocked?"Your investment feature is available.":"investment is locked until your account deposit has been approved.";
-const box=el("investmentPackages");box.innerHTML="";
-investPackages.forEach(p=>{
-const div=document.createElement("div");div.className="package-card";
-const name=document.createElement("h3");name.textContent=p.name;
-const price=document.createElement("div");price.className="package-price";price.textContent="₦"+money(p.amount);
-const details=document.createElement("p");details.textContent="Simulated total return: ₦"+money(p.totalReturn)+" | Duration: "+p.days+" days";
-const note=document.createElement("p");note.className="small";note.textContent="Invest only. No cash value.";
-const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled=!unlocked;btn.onclick=()=>startInvestment(p.id);
-div.append(name,price,details,note,btn);box.appendChild(div);
-});
-await loadMyInvestments();
+ if(!currentUser)return;await loadInvestmentSettings();$("InvestBalance").textContent=money(myProfile.InvestBalance);$("investBalancePage").textContent=money(myProfile.InvestBalance);
+ $("investAccessMessage").textContent=(isAdmin||myProfile.taskAccess===true)?"Choose a package. Its price will be deducted from Deposit Balance.":"Investment is locked until your first deposit is approved.";
+ const box=$("investmentPackages");box.innerHTML="";
+ investPackages.forEach(p=>{const x=document.createElement("div");x.className="package-card";const h=document.createElement("h3");h.textContent=p.name;const price=document.createElement("div");price.className="package-price";price.textContent="₦"+money(p.amount);const details=document.createElement("p");details.textContent="Illustrative total return: ₦"+money(p.totalReturn)+" • Duration: "+p.days+" days";const note=document.createElement("p");note.className="small";note.textContent="Simulation only — not guaranteed or withdrawable cash.";const b=document.createElement("button");b.textContent="Start Package";b.disabled=!isAdmin&&myProfile.taskAccess!==true;b.onclick=()=>startInvestment(p.id);x.append(h,price,details,note,b);box.append(x)});
+ await loadMyInvestments();
 }
 async function startInvestment(packageId){
-if(!currentUser)return;
-if(!isAdmin&&myProfile.taskAccess!==true)return alert("Your investment feature is locked.");
-const p=investPackages.find(x=>x.id===packageId);if(!p)return alert("Package not found.");
-if(!confirm("Start this Invest package using your  wallet."))return;
-try{
-const userRef=db.collection("users").doc(currentUser.uid),investmentRef=db.collection("investments").doc();
-await db.runTransaction(async tx=>{
-const u=await tx.get(userRef);if(!u.exists)throw new Error("User account not found.");
-const balance=Number(u.data().InvestBalance||0);
-if(balance<Number(p.amount))throw new Error("Not enough wallet balance.Go and Deposit to Fund your Wallet.");
-tx.update(userRef,{InvestBalance:balance-Number(p.amount)});
-tx.set(investmentRef,{
-userId:currentUser.uid,packageId:p.id,packageName:p.name,
-principal:Number(p.amount),totalReturn:Number(p.totalReturn),duration:Number(p.days),
-claimedDays:0,claimedTotal:0,status:"active",
-startAt:firebase.firestore.FieldValue.serverTimestamp(),
-lastClaimAt:null,createdAt:firebase.firestore.FieldValue.serverTimestamp()
-});
-});
-await loadProfile();await loadInvestmentPage();alert("package started successfully.");
-}catch(e){alert(e.message)}
+ if(!currentUser)return;const p=investPackages.find(v=>v.id===packageId);if(!p)return alert("Package not found.");if(!isAdmin&&myProfile.taskAccess!==true)return alert("Investment access is locked.");
+ if(!confirm("Move ₦"+money(p.amount)+" from Deposit Balance into this package?"))return;
+ try{const uRef=db.collection("users").doc(currentUser.uid),iRef=db.collection("investments").doc();
+ await db.runTransaction(async tx=>{const u=await tx.get(uRef);if(!u.exists)throw Error("User account not found.");const data=u.data(),deposit=Number(data.depositBalance||0);if(deposit<Number(p.amount))throw Error("Insufficient Deposit Balance. Please make a deposit first.");tx.update(uRef,{depositBalance:deposit-Number(p.amount),InvestBalance:Number(data.InvestBalance||0)+Number(p.amount)});tx.set(iRef,{userId:currentUser.uid,packageId:p.id,packageName:p.name,principal:Number(p.amount),illustrativeTotalReturn:Number(p.totalReturn),duration:Number(p.days),claimedDays:0,claimedIllustrativeTotal:0,status:"active",startAt:firebase.firestore.FieldValue.serverTimestamp(),createdAt:firebase.firestore.FieldValue.serverTimestamp()})});
+ await loadProfile();await loadInvestmentPage();alert("Package started. Deposit Balance has been reduced and the investment record created.");
+ }catch(e){alert(e.message)}
 }
-function getTimestampMillis(value){
-if(!value)return 0;
-if(typeof value.toMillis==="function")return value.toMillis();
-if(value.seconds)return value.seconds*1000;
-return 0;
-}
-function formatRemaining(ms){
-if(ms<=0)return "Available now";
-const total=Math.ceil(ms/1000),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
-return h+"h "+m+"m "+s+"s";
-}
+function remainingText(ms){if(ms<=0)return "Available now";const s=Math.ceil(ms/1000);return Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m "+s%60+"s"}
 async function loadMyInvestments(){
-if(!currentUser)return;
-const activeBox=el("activeInvestments"),historyBox=el("investmentHistory");
-activeBox.textContent="Loading...";historyBox.textContent="Loading...";
-try{
-const snap=await db.collection("investments").where("userId","==",currentUser.uid).get();
-activeBox.innerHTML="";historyBox.innerHTML="";
-const active=[],finished=[];
-snap.forEach(d=>{const v={id:d.id,...d.data()};if(v.status==="active")active.push(v);else finished.push(v)});
-active.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));
-finished.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));
-active.forEach(v=>{
-const div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=v.packageName||"invest Package";
-const info=document.createElement("p");info.textContent=" amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);
-const days=document.createElement("p");days.textContent="Progress: "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";
-const percent=Math.min(100,(Number(v.claimedDays||0)/Math.max(1,Number(v.duration||7)))*100);
-const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("div");fill.style.width=percent+"%";bar.appendChild(fill);
-const last=getTimestampMillis(v.lastClaimAt)||getTimestampMillis(v.startAt);
-const remaining=last+86400000-Date.now();
-const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"claim: Available now":"Next claim in: "+formatRemaining(remaining);
-const claimed=document.createElement("p");claimed.textContent="rewards claimed: ₦"+money(v.claimedTotal||0);
-const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimDemoReward(v.id,btn);
-div.append(title,info,days,bar,claimed,timer,btn);activeBox.appendChild(div);
-});
-finished.forEach(v=>{
-const div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=v.packageName||"Package";
-const info=document.createElement("p");info.textContent="amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);
-const status=document.createElement("p");status.className="status-approved";status.textContent="COMPLETED • "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";
-const claimed=document.createElement("p");claimed.textContent="Total rewards claimed: ₦"+money(v.claimedTotal||0);
-div.append(title,info,status,claimed);historyBox.appendChild(div);
-});
-if(!activeBox.children.length)activeBox.textContent="No active investments.";
-if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";
-}catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent=e.message}
-}
-async function claimReward(id,button){
-if(!currentUser||button.disabled)return;
-button.disabled=true;button.textContent="Checking...";
-try{
-const invRef=db.collection("investments").doc(id),userRef=db.collection("users").doc(currentUser.uid);
-await db.runTransaction(async tx=>{
-const inv=await tx.get(invRef);if(!inv.exists)throw new Error("investment not found.");
-const data=inv.data();if(data.userId!==currentUser.uid)throw new Error("This investment does not belong to your account.");
-if(data.status!=="active")throw new Error("This investment is already completed.");
-const days=Number(data.duration||7),claimed=Number(data.claimedDays||0);
-if(claimed>=days)throw new Error("All claims have been completed.");
-const last=getTimestampMillis(data.lastClaimAt)||getTimestampMillis(data.startAt);
-if(!last||Date.now()<last+86400000)throw new Error("Your claim is not ready yet. Wait until 24 hours have passed.");
-const user=await tx.get(userRef);if(!user.exists)throw new Error("User account not found.");
-const total=Number(data.totalReturn)||0;
-const daily=Math.floor(total/days);
-const reward=claimed===days-1?total-daily*(days-1):daily;
-const newBalance=Number(user.data().InvestBalance||0)+reward;
-const newClaimed=claimed+1,newTotal=Number(data.claimedTotal||0)+reward;
-tx.update(userRef,{InvestBalance:newBalance});
-tx.update(invRef,{
-claimedDays:newClaimed,claimedTotal:newTotal,
-lastClaimAt:firebase.firestore.FieldValue.serverTimestamp(),
-status:newClaimed>=days?"completed":"active",
-completedAt:newClaimed>=days?firebase.firestore.FieldValue.serverTimestamp():null
-});
-});
-await loadProfile();await loadInvestmentPage();alert("reward added to your wallet.");
-}catch(e){alert(e.message);button.disabled=false;button.textContent="Claim Reward"}
+ if(!currentUser)return;const activeBox=$("activeInvestments"),historyBox=$("investmentHistory");activeBox.textContent="Loading...";historyBox.textContent="Loading...";
+ try{const snap=await db.collection("investments").where("userId","==",currentUser.uid).get(),active=[],finished=[];snap.forEach(d=>{const v={id:d.id,...d.data()};(v.status==="active"?active:finished).push(v)});
+ active.sort((a,b)=>stamp(b.createdAt)-stamp(a.createdAt));finished.sort((a,b)=>stamp(b.createdAt)-stamp(a.createdAt));activeBox.innerHTML="";historyBox.innerHTML="";
+ active.forEach(v=>{const x=document.createElement("div");x.className="item";const h=document.createElement("h3");h.textContent=v.packageName||"Investment";const p=document.createElement("p");p.textContent="Principal: ₦"+money(v.principal)+" | Illustrative return: ₦"+money(v.illustrativeTotalReturn!==undefined?v.illustrativeTotalReturn:v.totalReturn);const progress=document.createElement("p");progress.textContent="Status: ACTIVE • "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("div");fill.style.width=Math.min(100,100*Number(v.claimedDays||0)/Math.max(1,Number(v.duration||7)))+"%";bar.append(fill);const created=stamp(v.startAt)||stamp(v.createdAt),wait=created+86400000-Date.now();const timer=document.createElement("p");timer.className="small";timer.textContent="Next simulated update: "+remainingText(wait);const claim=document.createElement("button");claim.textContent=wait<=0?"Record Daily Simulation":"Not Ready Yet";claim.disabled=wait>0;claim.onclick=()=>claimInvestmentSimulation(v.id,claim);x.append(h,p,progress,bar,timer,claim);activeBox.append(x)});
+ finished.forEach(v=>{const x=document.createElement("div");x.className="item";const h=document.createElement("h3");h.textContent=v.packageName||"Investment";const p=document.createElement("p");p.textContent="Principal: ₦"+money(v.principal)+" | Simulated amount recorded: ₦"+money(v.claimedIllustrativeTotal!==undefined?v.claimedIllustrativeTotal:(v.claimedTotal||0));const st=document.createElement("p");st.className="status-approved";st.textContent="COMPLETED • "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";x.append(h,p,st);historyBox.append(x)});
+ if(!activeBox.children.length)activeBox.textContent="No active investments.";if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";
+ }catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent="Could not load investment history: "+e.message}
 }
 
-/* ADMIN SETTINGS */
+/* Daily investment updates are simulations only; they do not create withdrawable cash. */
+async function claimInvestmentSimulation(id,button){
+ if(!currentUser||button.disabled)return;
+ button.disabled=true;button.textContent="Processing...";
+ try{
+  const invRef=db.collection("investments").doc(id),userRef=db.collection("users").doc(currentUser.uid);
+  await db.runTransaction(async tx=>{
+   const inv=await tx.get(invRef);
+   if(!inv.exists)throw Error("Investment record not found.");
+   const v=inv.data();
+   if(v.userId!==currentUser.uid)throw Error("This investment does not belong to your account.");
+   if(v.status!=="active")throw Error("This investment is already completed.");
+   const days=Number(v.duration||7),claimed=Number(v.claimedDays||0);
+   if(claimed>=days)throw Error("All simulation days are complete.");
+   const last=stamp(v.lastClaimAt)||stamp(v.startAt);
+   if(!last||Date.now()<last+86400000)throw Error("Wait until 24 hours have passed.");
+   const u=await tx.get(userRef);if(!u.exists)throw Error("User account not found.");
+   const total=Number(v.illustrativeTotalReturn!==undefined?v.illustrativeTotalReturn:v.totalReturn)||0,daily=Math.floor(total/days);
+   const reward=claimed===days-1?total-daily*(days-1):daily;
+   const nextDays=claimed+1;
+   tx.update(userRef,{InvestBalance:Number(u.data().InvestBalance||0)+reward});
+   tx.update(invRef,{
+    claimedDays:nextDays,
+    claimedIllustrativeTotal:Number(v.claimedIllustrativeTotal||0)+reward,
+    lastClaimAt:firebase.firestore.FieldValue.serverTimestamp(),
+    status:nextDays>=days?"completed":"active",
+    completedAt:nextDays>=days?firebase.firestore.FieldValue.serverTimestamp():null
+   });
+  });
+  await loadProfile();await loadInvestmentPage();
+ }catch(e){alert(e.message);button.disabled=false;button.textContent="Record Daily Simulation"}
+}
+
+/* Tasks */
+async function loadTasks(){
+ if(!currentUser)return;const box=$("taskList");box.textContent="Loading tasks...";
+ if(!isAdmin&&myProfile.taskAccess!==true){box.innerHTML='<div class="notice">Tasks are locked. Submit a deposit and wait for admin verification.</div>';return}
+ try{const [tasks,subs]=await Promise.all([db.collection("tasks").orderBy("createdAt","desc").get(),db.collection("submissions").where("userId","==",currentUser.uid).get()]);const done=new Set();subs.forEach(d=>done.add(d.data().taskId));box.innerHTML="";
+ tasks.forEach(d=>{if(done.has(d.id))return;const t=d.data(),x=document.createElement("div");x.className="item";const h=document.createElement("h3");h.textContent=t.title;const p=document.createElement("p");p.textContent=t.description;const r=document.createElement("p");r.textContent="Reward: ₦"+money(t.reward);const proof=document.createElement("textarea");proof.placeholder="Enter task proof";const b=document.createElement("button");b.textContent="Submit Task";b.onclick=()=>submitTask(d.id,t,proof.value,b);x.append(h,p,r,proof,b);box.append(x)});if(!box.children.length)box.textContent="No new tasks available."}
+ catch(e){box.textContent="Could not load tasks: "+e.message}
+}
+async function submitTask(id,t,proof,b){
+ if(!proof.trim())return alert("Enter your proof.");b.disabled=true;
+ try{const ref=db.collection("submissions").doc(currentUser.uid+"_"+id);await db.runTransaction(async tx=>{const old=await tx.get(ref);if(old.exists)throw Error("You already submitted this task.");tx.set(ref,{taskId:id,taskTitle:t.title||"Task",taskDescription:t.description||"",taskReward:Number(t.reward)||0,userId:currentUser.uid,email:currentUser.email||"",proof:proof.trim(),status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()})});alert("Task submitted for review.");await loadTasks();await loadHistory()}
+ catch(e){alert(e.message);b.disabled=false}
+}
+async function loadHistory(){
+ if(!currentUser)return;const box=$("historyList");box.textContent="Loading...";
+ try{const s=await db.collection("submissions").where("userId","==",currentUser.uid).get();box.innerHTML="";s.forEach(d=>{const v=d.data(),x=document.createElement("div");x.className="item";const h=document.createElement("h3");h.textContent=v.taskTitle||"Task";const p=document.createElement("p");p.textContent=(v.taskDescription||"")+" • Reward ₦"+money(v.taskReward);const st=document.createElement("p");st.textContent="Status: "+String(v.status||"pending").toUpperCase();st.className=v.status==="approved"?"status-approved":v.status==="rejected"?"status-rejected":"status-pending";x.append(h,p,st);box.append(x)});if(!box.children.length)box.textContent="No task activity yet."}
+ catch(e){box.textContent=e.message}
+}
+async function postTask(){
+ if(!isAdmin)return;const title=$("newTaskTitle").value.trim(),description=$("newTaskDescription").value.trim(),reward=Number($("newTaskReward").value);if(!title||!description||!Number.isFinite(reward)||reward<0)return alert("Complete the task details.");
+ try{await db.collection("tasks").add({title,description,reward,createdAt:firebase.firestore.FieldValue.serverTimestamp()});$("newTaskTitle").value="";$("newTaskDescription").value="";$("newTaskReward").value="";await loadAdmin();await loadTasks();alert("Task published.")}
+ catch(e){alert(e.message)}
+}
+async function loadAdmin(){
+ if(!isAdmin)return;await loadDepositAdmin();await loadWithdrawalAdmin();await loadAdminTasksAndSubmissions();await loadAdminInvestmentSettings();
+}
+async function loadAdminTasksAndSubmissions(){
+ const tb=$("adminTasks"),sb=$("submissionList");tb.textContent="Loading...";sb.textContent="Loading...";
+ try{const tasks=await db.collection("tasks").get();tb.innerHTML="";tasks.forEach(d=>{const x=document.createElement("div");x.className="item";x.textContent=d.data().title+" ";const b=document.createElement("button");b.className="danger";b.textContent="Delete";b.onclick=async()=>{if(confirm("Delete task?")){await d.ref.delete();loadAdminTasksAndSubmissions();loadTasks()}};x.append(b);tb.append(x)});if(!tb.children.length)tb.textContent="No tasks.";
+ const subs=await db.collection("submissions").get();sb.innerHTML="";subs.forEach(d=>{const v=d.data(),x=document.createElement("div");x.className="item";const p=document.createElement("p");p.style.whiteSpace="pre-wrap";p.textContent="User: "+v.email+"\nTask: "+v.taskTitle+"\nReward: ₦"+money(v.taskReward)+"\nProof: "+v.proof+"\nStatus: "+v.status;x.append(p);if(v.status==="pending"){const a=document.createElement("button");a.textContent="Approve";a.onclick=()=>reviewTask(d.id,"approved",a);const r=document.createElement("button");r.className="danger";r.textContent="Reject";r.onclick=()=>reviewTask(d.id,"rejected",r);x.append(a,r)}sb.append(x)});if(!sb.children.length)sb.textContent="No submissions."}
+ catch(e){tb.textContent=e.message;sb.textContent=e.message}
+}
+async function reviewTask(id,status,b){
+ if(!isAdmin)return;b.disabled=true;
+ try{const ref=db.collection("submissions").doc(id);await db.runTransaction(async tx=>{const s=await tx.get(ref);if(!s.exists||s.data().status!=="pending")throw Error("Already reviewed.");const v=s.data();if(status==="approved"){const uRef=db.collection("users").doc(v.userId),u=await tx.get(uRef);if(!u.exists)throw Error("User not found.");tx.update(uRef,{demoPoints:Number(u.data().demoPoints||0)+Number(v.taskReward||0)})}tx.update(ref,{status,reviewedAt:firebase.firestore.FieldValue.serverTimestamp()})});await loadAdminTasksAndSubmissions();await loadHistory();alert("Task "+status+".")}
+ catch(e){alert(e.message);b.disabled=false}
+}
+
+/* Withdrawals use task earnings only; separate from deposits/investment ledger. */
+async function requestWithdrawal(){
+ const amount=Number($("withdrawAmount").value),bank=$("withdrawBank").value.trim(),name=$("withdrawAccountName").value.trim(),number=$("withdrawAccountNumber").value.trim(),b=$("withdrawButton");
+ if(!Number.isFinite(amount)||amount<1000)return alert("Minimum withdrawal is ₦1000.");if(!bank||!name||!/^\d{10}$/.test(number))return alert("Enter valid bank details.");b.disabled=true;
+ try{const uRef=db.collection("users").doc(currentUser.uid),wRef=db.collection("withdrawals").doc();await db.runTransaction(async tx=>{const u=await tx.get(uRef);if(!u.exists)throw Error("User not found.");const bal=Number(u.data().demoPoints||0);if(amount>bal)throw Error("Insufficient task earnings.");tx.update(uRef,{demoPoints:bal-amount});tx.set(wRef,{userId:currentUser.uid,email:currentUser.email||"",amount,bank,accountName:name,accountNumber:number,status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()})});msg("withdrawMessage","Request submitted. Task earnings have been reserved.");$("withdrawAmount").value="";await loadProfile();await loadWithdrawalHistory()}
+ catch(e){alert(e.message)}finally{b.disabled=false}
+}
+async function loadWithdrawalHistory(){
+ if(!currentUser)return;const box=$("withdrawHistory");if(!box)return;box.textContent="Loading...";
+ try{const s=await db.collection("withdrawals").where("userId","==",currentUser.uid).get();box.innerHTML="";s.forEach(d=>{const w=d.data(),x=document.createElement("div");x.className="item";x.textContent="₦"+money(w.amount)+" • "+w.bank+" • "+String(w.status).toUpperCase();box.append(x)});if(!box.children.length)box.textContent="No withdrawal requests."}
+ catch(e){box.textContent=e.message}
+}
+async function loadWithdrawalAdmin(){
+ const box=$("withdrawalAdminList");box.textContent="Loading...";
+ try{const s=await db.collection("withdrawals").where("status","==","pending").get();box.innerHTML="";s.forEach(d=>{const w=d.data(),x=document.createElement("div");x.className="item";const p=document.createElement("p");p.textContent=w.email+" • ₦"+money(w.amount)+" • "+w.bank+" • "+w.accountName+" • "+w.accountNumber;const a=document.createElement("button");a.textContent="Mark Paid";a.onclick=()=>processWithdrawal(d.id,"approved",a);const r=document.createElement("button");r.className="danger";r.textContent="Reject";r.onclick=()=>processWithdrawal(d.id,"rejected",r);x.append(p,a,r);box.append(x)});if(!box.children.length)box.textContent="No pending withdrawals."}
+ catch(e){box.textContent=e.message}
+}
+async function processWithdrawal(id,status,b){
+ if(!isAdmin)return;if(status==="approved"&&!confirm("Have you actually paid this withdrawal?"))return;b.disabled=true;
+ try{await db.collection("withdrawals").doc(id).update({status,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentUser.uid});await loadWithdrawalAdmin();await loadWithdrawalHistory();alert("Withdrawal marked "+status+".")}
+ catch(e){alert(e.message);b.disabled=false}
+}
+
+/* Admin package settings */
 async function loadAdminInvestmentSettings(){
-if(!isAdmin)return;
-await loadInvestmentSettings();
-const box=el("adminInvestmentSettings");if(!box)return;
-box.innerHTML="";
-investPackages.forEach((p,index)=>{
-const div=document.createElement("div");div.className="item";
-const heading=document.createElement("h3");heading.textContent=p.name+" • Package "+(index+1);
-const amount=document.createElement("input");amount.type="number";amount.min="1";amount.id="invAmount_"+p.id;amount.value=p.amount;amount.placeholder="package amount";
-const total=document.createElement("input");total.type="number";total.min="0";total.id="invReturn_"+p.id;total.value=p.totalReturn;total.placeholder="Simulated total return";
-const days=document.createElement("input");days.type="number";days.min="1";days.max="365";days.id="invDays_"+p.id;days.value=p.days;days.placeholder="Duration in days";
-const label=document.createElement("p");label.className="small";label.textContent="amount • Simulated return • Number of days";
-div.append(heading,label,amount,total,days);box.appendChild(div);
-});
-const credit=document.createElement("div");credit.className="item";
-const label=document.createElement("label");label.textContent="Welcome invest credit (granted once after deposit approval)";
-const input=document.createElement("input");input.type="number";input.min="0";input.id="welcomeCreditInput";input.value=welcomeCredit;
-credit.append(label,input);box.appendChild(credit);
+ if(!isAdmin)return;const box=$("adminInvestmentSettings");box.innerHTML="";
+ investPackages.forEach((p,i)=>{const x=document.createElement("div");x.className="item";const h=document.createElement("h3");h.textContent=p.name+" #"+(i+1);const a=document.createElement("input");a.type="number";a.id="pkgAmount_"+p.id;a.value=p.amount;a.placeholder="Package amount";const r=document.createElement("input");r.type="number";r.id="pkgReturn_"+p.id;r.value=p.totalReturn;r.placeholder="Illustrative return";const d=document.createElement("input");d.type="number";d.id="pkgDays_"+p.id;d.value=p.days;d.placeholder="Duration days";x.append(h,a,r,d);box.append(x)})
 }
 async function saveAdminInvestmentSettings(){
-if(!isAdmin)return alert("Admin access required.");
-const updated=[];
-for(const p of investPackages){
-const amount=Number(el("invAmount_"+p.id).value),totalReturn=Number(el("invReturn_"+p.id).value),days=Number(el("invDays_"+p.id).value);
-if(!Number.isFinite(amount)||amount<=0||!Number.isFinite(totalReturn)||totalReturn<0||!Number.isInteger(days)||days<1||days>365){
-return message("investmentSettingsMessage","Enter valid amounts, returns and durations for every package.");
-}
-updated.push({...p,amount,totalReturn,days});
-}
-const credit=Number(el("welcomeCreditInput").value);
-if(!Number.isFinite(credit)||credit<0)return message("investmentSettingsMessage","Enter a valid welcome credit.");
-try{
-await db.collection("settings").doc("Investment").set({
-packages:updated,welcomeCredit:credit,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentUser.uid
-},{merge:true});
-investPackages=updated;welcomeCredit=credit;
-message("investmentSettingsMessage","Investment settings saved. New investments will use the updated package settings.");
-await loadInvestmentPage();
-}catch(e){message("investmentSettingsMessage","Could not save: "+e.message)}
-}
-async function creditDemoWallet(){
-if(!isAdmin)return
-const email=el("creditUserEmail").value.trim().toLowerCase(),amount=Number(el("creditAmount").value);
-if(!email||!Number.isFinite(amount)||amount<=0)return message("CreditMessage","Enter a valid email and credit amount.");
-try{
-const snap=await db.collection("users").where("email","==",email).limit(1).get();
-if(snap.empty)return message("CreditMessage","No user found with that email.");
-const userDoc=snap.docs[0];
-await db.runTransaction(async tx=>{
-const u=await tx.get(userDoc.ref);if(!u.exists)throw new Error("User not found.");
-tx.update(userDoc.ref,{InvestBalance:Number(u.data().InvestBalance||0)+amount});
-});
-message("CreditMessage"," wallet credited successfully.cash was transferred.");
-el("creditUserEmail").value="";el("creditAmount").value="";
-}catch(e){message("CreditMessage","Credit failed: "+e.message)}
+ if(!isAdmin)return;const updated=[];
+ for(const p of investPackages){const amount=Number($("pkgAmount_"+p.id).value),totalReturn=Number($("pkgReturn_"+p.id).value),days=Number($("pkgDays_"+p.id).value);if(!Number.isFinite(amount)||amount<=0||!Number.isFinite(totalReturn)||totalReturn<0||!Number.isInteger(days)||days<1||days>365)return msg("investmentSettingsMessage","Enter valid package amounts, illustrative returns and durations.");updated.push({...p,amount,totalReturn,days})}
+ try{await db.collection("settings").doc("Investment").set({packages:updated,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:currentUser.uid},{merge:true});investPackages=updated;msg("investmentSettingsMessage","Package settings saved.");await loadInvestmentPage()}
+ catch(e){msg("investmentSettingsMessage","Could not save settings: "+e.message)}
 }
 </script>
 </body>
