@@ -627,7 +627,7 @@ if(!userSnap.exists)throw new Error("User account not found.");
 if(status==="approved"){
 const userData=userSnap.data(),updates={taskAccess:true,taskAccessApprovedAt:firebase.firestore.FieldValue.serverTimestamp()};
 if(userData.InvestWelcomeGranted!==true){
-updates.InvestBalance=Number(userData.InvestBalance||0)+welcomeDemoCredit;
+updates.InvestBalance=Number(userData.InvestBalance||0)+welcomeCredit;
 updates.InvestWelcomeGranted=true;
 updates.InvestWelcomeGrantedAt=firebase.firestore.FieldValue.serverTimestamp();
 }
