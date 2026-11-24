@@ -722,7 +722,7 @@ if(Array.isArray(data.packages)){
 const valid=data.packages.filter(p=>p&&typeof p.id==="string"&&Number(p.amount)>0&&Number(p.totalReturn)>=0&&Number(p.days)>0);
 if(valid.length)investPackages=valid;
 }
-if(Number.isFinite(Number(data.welcomeCredit))&&Number(data.welcomeCredit)>=0)welcomeDemoCredit=Number(data.welcomeCredit);
+if(Number.isFinite(Number(data.welcomeCredit))&&Number(data.welcomeCredit)>=0)welcomeCredit=Number(data.welcomeCredit);
 }
 }catch(e){console.warn("Using default investment settings:",e.message)}
 }
@@ -739,7 +739,7 @@ const div=document.createElement("div");div.className="package-card";
 const name=document.createElement("h3");name.textContent=p.name;
 const price=document.createElement("div");price.className="package-price";price.textContent="₦"+money(p.amount);
 const details=document.createElement("p");details.textContent="Simulated total return: ₦"+money(p.totalReturn)+" | Duration: "+p.days+" days";
-const note=document.createElement("p");note.className="small";note.textContent="Invest only. No cash value.";
+const note=document.createElement("p");note.className="small";note.textContent="Invest only..";
 const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled=!unlocked;btn.onclick=()=>startInvestment(p.id);
 div.append(name,price,details,note,btn);box.appendChild(div);
 });
