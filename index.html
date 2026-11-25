@@ -697,7 +697,8 @@ if(!currentUser)return;
 await loadInvestmentSettings();  
 const balance=Number(myProfile.InvestBalance||0);  
 el("InvestBalance").textContent=money(balance);  
-const unlocked = !currentUser;
+const isUser = !!currentUser;
+const unlocked = isUser;
 el("investAccessMessage").textContent=unlocked?"Your investment feature is available.":"investment is locked until your account deposit has been approved.";  
 const box=el("investmentPackages");box.innerHTML="";  
 investPackages.forEach(p=>{  
