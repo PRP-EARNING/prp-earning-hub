@@ -713,6 +713,113 @@ alert("Withdrawal request rejected.");await loadWithdrawalAdmin();await loadWith
 }
 
 /*  INVESTMENT SETTINGS */
+
+async function startInvestment(packageId) {
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("Please log in first.");
+    return;
+  }
+
+  const selectedPackage = investmentPackages.find(
+    p => p.id === packageId
+  );
+
+  if (!selectedPackage) {
+    alert("Package not found.");
+    return;
+  }
+
+  try {
+    const existing = await db.collection("investmentRequests")
+      .where("userId", "==", user.uid)
+      .where("status", "==", "PENDING")
+      .get();
+
+    if (!existing.empty) {
+      alert("You already have a pending package request.");
+      return;
+    }
+
+    await db.collection("investmentRequests").add({
+      userId: user.uid,
+      userName: user.displayName || "",
+      packageId: selectedPackage.id,
+      packageName: selectedPackage.name,
+      amount: Number(selectedPackage.amount),
+      status: "PENDING",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert("Package request submitted. Waiting for admin approval.");
+    loadInvestmentRequests();
+
+  } catch (error) {
+    console.error(error);
+    alert("Unable to submit request: " + error.message);
+  }
+}
+
+async function approveInvestmentRequest(requestId) {
+  if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
+    alert("Admin access required.");
+    return;
+  }
+
+  const requestRef = db.collection("investmentRequests").doc(requestId);
+
+  try {
+    await db.runTransaction(async transaction => {
+      const requestSnap = await transaction.get(requestRef);
+
+      if (!requestSnap.exists) {
+        throw new Error("Request not found.");
+      }
+
+      const request = requestSnap.data();
+
+      if (request.status !== "PENDING") {
+        throw new Error("This request has already been processed.");
+      }
+
+      const userRef = db.collection("users").doc(request.userId);
+      const userSnap = await transaction.get(userRef);
+
+      if (!userSnap.exists) {
+        throw new Error("User account not found.");
+      }
+
+      const balance = Number(userSnap.data().InvestBalance || 0);
+      const amount = Number(request.amount);
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("Invalid package amount.");
+      }
+
+      if (balance < amount) {
+        throw new Error("Insufficient investment wallet balance.");
+      }
+
+      transaction.update(userRef, {
+        InvestBalance: balance - amount
+      });
+
+      transaction.update(requestRef, {
+        status: "APPROVED",
+        approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
+
+    alert("Package approved and wallet balance deducted.");
+    loadInvestmentRequests();
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
+}
+
 async function loadInvestmentSettings(){
 try{
 const snap=await db.collection("settings").doc("Investment").get();
@@ -787,65 +894,7 @@ try{
 const snap=await db.collection("investments").where("userId","==",currentUser.uid).get();
 activeBox.innerHTML="";historyBox.innerHTML="";
 const active=[],finished=[];
-snap.forEach(d=>{const v={id:d.id,...d.data()};if(v.status==="active")active.push(v);else finished.push(v)});
-active.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));
-finished.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));
-active.forEach(v=>{
-const div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=v.packageName||"invest Package";
-const info=document.createElement("p");info.textContent=" amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);
-const days=document.createElement("p");days.textContent="Progress: "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";
-const percent=Math.min(100,(Number(v.claimedDays||0)/Math.max(1,Number(v.duration||7)))*100);
-const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("div");fill.style.width=percent+"%";bar.appendChild(fill);
-const last=getTimestampMillis(v.lastClaimAt)||getTimestampMillis(v.startAt);
-const remaining=last+86400000-Date.now();
-const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"claim: Available now":"Next claim in: "+formatRemaining(remaining);
-const claimed=document.createElement("p");claimed.textContent="rewards claimed: ₦"+money(v.claimedTotal||0);
-const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimReward(v.id,btn);
-div.append(title,info,days,bar,claimed,timer,btn);activeBox.appendChild(div);
-});
-finished.forEach(v=>{
-const div=document.createElement("div");div.className="item";
-const title=document.createElement("h3");title.textContent=v.packageName||"Package";
-const info=document.createElement("p");info.textContent="amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);
-const status=document.createElement("p");status.className="status-approved";status.textContent="COMPLETED • "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";
-const claimed=document.createElement("p");claimed.textContent="Total rewards claimed: ₦"+money(v.claimedTotal||0);
-div.append(title,info,status,claimed);historyBox.appendChild(div);
-});
-if(!activeBox.children.length)activeBox.textContent="No active investments.";
-if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";
-}catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent=e.message}
-}
-async function claimReward(id,button){
-if(!currentUser||button.disabled)return;
-button.disabled=true;button.textContent="Checking...";
-try{
-const invRef=db.collection("investments").doc(id),userRef=db.collection("users").doc(currentUser.uid);
-await db.runTransaction(async tx=>{
-const inv=await tx.get(invRef);if(!inv.exists)throw new Error("investment not found.");
-const data=inv.data();if(data.userId!==currentUser.uid)throw new Error("This investment does not belong to your account.");
-if(data.status!=="active")throw new Error("This investment is already completed.");
-const days=Number(data.duration||7),claimed=Number(data.claimedDays||0);
-if(claimed>=days)throw new Error("All claims have been completed.");
-const last=getTimestampMillis(data.lastClaimAt)||getTimestampMillis(data.startAt);
-if(!last||Date.now()<last+86400000)throw new Error("Your claim is not ready yet. Wait until 24 hours have passed.");
-const user=await tx.get(userRef);if(!user.exists)throw new Error("User account not found.");
-const total=Number(data.totalReturn)||0;
-const daily=Math.floor(total/days);
-const reward=claimed===days-1?total-daily*(days-1):daily;
-const newBalance=Number(user.data().InvestBalance||0)+reward;
-const newClaimed=claimed+1,newTotal=Number(data.claimedTotal||0)+reward;
-tx.update(userRef,{InvestBalance:newBalance});
-tx.update(invRef,{
-claimedDays:newClaimed,claimedTotal:newTotal,
-lastClaimAt:firebase.firestore.FieldValue.serverTimestamp(),
-status:newClaimed>=days?"completed":"active",
-completedAt:newClaimed>=days?firebase.firestore.FieldValue.serverTimestamp():null
-});
-});
-await loadProfile();await loadInvestmentPage();alert("reward added to your wallet.");
-}catch(e){alert(e.message);button.disabled=false;button.textContent="Claim Reward"}
-}
+snap.forEach(d=>{const v={id:d.id,...d.data()};if(v.status==="active")active.push(v);else finished.push(v)});             } }
 
 /* ADMIN SETTINGS */
 async function loadAdminInvestmentSettings(){
