@@ -725,7 +725,8 @@ await loadMyInvestments();
 }  
 async function startInvestment(packageId){  
 if(!currentUser)return;  
-if(!isAdmin&&myProfile.taskAccess!==true)return alert("Your investment feature is locked.");  
+if(!currentUser || myProfile.taskAccess !== true)
+return alert("Your investment feature is locked.");
 const p=investPackages.find(x=>x.id===packageId);if(!p)return alert("Package not found.");  
 if(!confirm("Start this Invest package using your  wallet."))return;  
 try{  
