@@ -707,7 +707,18 @@ const name=document.createElement("h3");name.textContent=p.name;
 const price=document.createElement("div");price.className="package-price";price.textContent="₦"+money(p.amount);  
 const details=document.createElement("p");details.textContent="Simulated total return: ₦"+money(p.totalReturn)+" | Duration: "+p.days+" days";  
 const note=document.createElement("p");note.className="small";note.textContent="Invest only..";  
-const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled=!unlocked;btn.onclick=()=>startInvestment(p.id);  
+const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled = !currentUser;
+btn.onclick = async () => {
+  btn.disabled = true;
+  try {
+    await startInvestment(p.id);
+  } catch (error) {
+    console.error("Start package error:", error);
+    alert(error.message || "Could not start package.");
+  } finally {
+    btn.disabled = false;
+  }
+};
 div.append(name,price,details,note,btn);box.appendChild(div);  
 });  
 await loadMyInvestments();  
