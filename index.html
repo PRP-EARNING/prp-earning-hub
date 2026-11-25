@@ -278,27 +278,6 @@ messagingSenderId:"470981481788",
 appId:"1:470981481788:web:c1eeb9a0a2844d8804ba39",
 measurementId:"G-TL488P4PES"
 };
-if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth(),db=firebase.firestore();
-const ADMIN_UID="FDTfk3CWHUcccM6LEeVbFUG7MRx1";
-let currentUser=null,isAdmin=false,myProfile={};
-let welcomeCredit=2000;
-let investPackages=[
-{id:"normal2000",name:"Normal Package",amount:2000,totalReturn:3600,days:7},
-{id:"normal5000",name:"Normal Package",amount:5000,totalReturn:8500,days:7},
-{id:"normal8000",name:"Normal Package",amount:8000,totalReturn:15000,days:7},
-{id:"mega10000",name:"Mega Package",amount:10000,totalReturn:18000,days:7},
-{id:"mega20000",name:"Mega Package",amount:20000,totalReturn:29000,days:7}
-];
-let countdownTimer=null;
-function el(id){return document.getElementById(id)}
-function message(id,text){el(id).textContent=text}
-function money(value){return Number(value||0).toLocaleString("en-NG")}
-function safeNumber(v,def=0){const n=Number(v);return Number.isFinite(n)?n:def}
-
-/* MENU */
-function toggleMenu(){el("sidebar").classList.toggle("open");el("sidebarOverlay").classList.toggle("open")}
-function closeMenu(){el("sidebar").classList.remove("open");el("sidebarOverlay").classList.remove("open")}
 
 /* AUTHENTICATION */
 function showSignup(){el("loginBox").classList.add("hidden");el("signupBox").classList.remove("hidden");message("authMessage","")}
@@ -464,7 +443,27 @@ div.append(title,desc,reward,proof,status);box.appendChild(div);
 if(!box.children.length)box.textContent="No activity yet.";
 }catch(e){box.textContent=e.message}
 }
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(),db=firebase.firestore();
+const ADMIN_UID="FDTfk3CWHUcccM6LEeVbFUG7MRx1";
+let currentUser=null,isAdmin=false,myProfile={};
+let welcomeCredit=2000;
+let investPackages=[
+{id:"normal2000",name:"Normal Package",amount:2000,totalReturn:3600,days:7},
+{id:"normal5000",name:"Normal Package",amount:5000,totalReturn:8500,days:7},
+{id:"normal8000",name:"Normal Package",amount:8000,totalReturn:15000,days:7},
+{id:"mega10000",name:"Mega Package",amount:10000,totalReturn:18000,days:7},
+{id:"mega20000",name:"Mega Package",amount:20000,totalReturn:29000,days:7}
+];
+let countdownTimer=null;
+function el(id){return document.getElementById(id)}
+function message(id,text){el(id).textContent=text}
+function money(value){return Number(value||0).toLocaleString("en-NG")}
+function safeNumber(v,def=0){const n=Number(v);return Number.isFinite(n)?n:def}
 
+/* MENU */
+function toggleMenu(){el("sidebar").classList.toggle("open");el("sidebarOverlay").classList.toggle("open")}
+function closeMenu(){el("sidebar").classList.remove("open");el("sidebarOverlay").classList.remove("open")}
 /* ADMIN TASK MANAGEMENT */
 async function postTask(){
 if(!isAdmin)return;
