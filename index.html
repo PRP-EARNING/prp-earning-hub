@@ -801,7 +801,7 @@ const last=getTimestampMillis(v.lastClaimAt)||getTimestampMillis(v.startAt);
 const remaining=last+86400000-Date.now();
 const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"claim: Available now":"Next claim in: "+formatRemaining(remaining);
 const claimed=document.createElement("p");claimed.textContent="rewards claimed: ₦"+money(v.claimedTotal||0);
-const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimDemoReward(v.id,btn);
+const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimReward(v.id,btn);
 div.append(title,info,days,bar,claimed,timer,btn);activeBox.appendChild(div);
 });
 finished.forEach(v=>{
