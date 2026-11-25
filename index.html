@@ -708,7 +708,7 @@ const details=document.createElement("p");details.textContent="Simulated total r
 const note=document.createElement("p");note.className="small";note.textContent="Invest only..";  
 const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled = !unlocked;
 btn.onclick = async () => {
-  btn.disabled = true;
+  btn.disabled = false;
   try {
     await startInvestment(p.id);
   } catch (error) {
