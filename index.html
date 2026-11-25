@@ -356,7 +356,7 @@ if(name==="admin"&&!isAdmin)return;
 const ids={dashboardHome:"dashboardHomePage",tasks:"tasksPage",Deposit:"DepositPage",withdraw:"withdrawPage",profile:"profilePage",history:"historyPage",admin:"adminPage",invest:"investPage"};  
 if(!ids[name])return;  
 el(ids[name]).classList.remove("hidden");  
-const titles={dashboardHome:"Analytics",tasks:"Perform Tasks",Deposit:"Payment / Deposit",withdraw:"Withdraw",profile:"My Profile",history:"History",admin:"Admin Dashboard",invest:"Demo Investment"};  
+const titles={dashboardHome:"Analytics",tasks:"Perform Tasks",Deposit:"Payment / Deposit",withdraw:"Withdraw",profile:"My Profile",history:"History",admin:"Admin Dashboard",invest:"Investment"};  
 el("pageHeading").textContent=titles[name]||"Dashboard";  
 document.querySelectorAll(".menu-link[data-page]").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===name));  
 closeMenu();  
