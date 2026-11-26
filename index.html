@@ -724,39 +724,63 @@ div.append(name,price,details,note,btn);box.appendChild(div);
 });  
 await loadMyInvestments();  
 }  
-async function startInvestment(packageId){  
-if(!currentUser)return alert("Please log in first.");
-const p=investPackages.find(x=>x.id===packageId);if(!p)return alert("Package not found.");  
-if(!confirm("Start this Invest package using your  wallet."))return;  
-try{  
-const userRef=db.collection("users").doc(currentUser.uid),investmentRef=db.collection("investments").doc();  
-await db.runTransaction(async tx=>{  
-const u=await tx.get(userRef);if(!u.exists)throw new Error("User account not found.");  
-const balance=Number(u.data().InvestBalance||0);  
-if(balance<Number(p.amount))throw new Error("Not enough wallet balance.Go and Deposit to Fund your Wallet.");  
-tx.update(userRef,{InvestBalance:balance-Number(p.amount)});  
-tx.set(investmentRef,{  
-userId:currentUser.uid,packageId:p.id,packageName:p.name,  
-principal:Number(p.amount),totalReturn:Number(p.totalReturn),duration:Number(p.days),  
-claimedDays:0,claimedTotal:0,status:"active",  
-startAt:firebase.firestore.FieldValue.serverTimestamp(),  
-lastClaimAt:null,createdAt:firebase.firestore.FieldValue.serverTimestamp()  
-});  
-});  
-await loadProfile();await loadInvestmentPage();alert("package started successfully.");  
-}catch(e){alert(e.message)}  
-}  
-function getTimestampMillis(value){  
-if(!value)return 0;  
-if(typeof value.toMillis==="function")return value.toMillis();  
-if(value.seconds)return value.seconds*1000;  
-return 0;  
-}  
-function formatRemaining(ms){  
-if(ms<=0)return "Available now";  
-const total=Math.ceil(ms/1000),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;  
-return h+"h "+m+"m "+s+"s";  
-}  
+
+async function startInvestment(packageId) {
+  if (!currentUser) {
+    alert("Please log in first.");
+    return;
+  }
+
+  const p = investPackages.find(x => x.id === packageId);
+
+  if (!p) {
+    alert("Package not found.");
+    return;
+  }
+
+  if (!confirm("Submit this package request for admin approval?")) {
+    return;
+  }
+
+  try {
+    const userRef = db.collection("users").doc(currentUser.uid);
+    const userSnap = await userRef.get();
+
+    if (!userSnap.exists) {
+      throw new Error("User account not found.");
+    }
+
+    const balance = Number(userSnap.data().InvestBalance || 0);
+
+    if (balance < Number(p.amount)) {
+      throw new Error("Insufficient wallet balance. Please fund your wallet.");
+    }
+
+    await db.collection("investments").add({
+      userId: currentUser.uid,
+      email: currentUser.email || "",
+      packageId: p.id,
+      packageName: p.name,
+      principal: Number(p.amount),
+      totalReturn: Number(p.totalReturn),
+      duration: Number(p.days),
+      claimedDays: 0,
+      claimedTotal: 0,
+      status: "pending",
+      requestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    await loadInvestmentPage();
+
+    alert("Package request submitted. Waiting for admin approval.");
+
+  } catch (error) {
+    console.error("Investment request error:", error);
+    alert(error.message);
+  }
+}
+
 async function loadMyInvestments(){  
 if(!currentUser)return;  
 const activeBox=el("activeInvestments"),historyBox=el("investmentHistory");  
