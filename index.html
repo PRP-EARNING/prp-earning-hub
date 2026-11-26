@@ -732,17 +732,26 @@ async function loadInvestmentPage(){
     const note=document.createElement("p");
     note.className="small";
     note.textContent="";
+    const btn = document.createElement("button");
+    btn.textContent = "Start Package";
+    btn.disabled = false;
+    btn.onclick = () => {
+      btn.disabled = true;
+      btn.textContent = "Submitting...";
+      startInvestment(p.id).finally(() => {
+        btn.disabled = false;
+        btn.textContent = "Start Package";
+      });
+    };
 
-    const btn=document.createElement("button");
-    btn.textContent="Start Package";
-    btn.disabled=false;
-
-    div.append(name,price,details,note,btn);
+    div.append(name, price, details, note, btn);
     box.appendChild(div);
   });
 
   await loadMyInvestments();
 }
+
+    
 async function startInvestment(packageId) {
   if (!currentUser) {
     alert("Please log in first.");
