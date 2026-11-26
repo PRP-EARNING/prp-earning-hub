@@ -699,39 +699,50 @@ if(Number.isFinite(Number(data.welcomeCredit))&&Number(data.welcomeCredit)>=0)we
 }  
 }catch(e){console.warn("Using default investment settings:",e.message)}  
 }  
-async function loadInvestmentPage(){  
-if(!currentUser)return;  
-await loadInvestmentSettings();  
-const balance=Number(myProfile.InvestBalance||0);  
-el("InvestBalance").textContent=money(balance);  
-const unlocked = !!currentUser;
-el("investAccessMessage").textContent = unlocked
-? "You can start any available package."
-: "Please log in to start a package.";
-const box=el("investmentPackages");box.innerHTML="";  
-investPackages.forEach(p=>{  
-const div=document.createElement("div");div.className="package-card";  
-const name=document.createElement("h3");name.textContent=p.name;  
-const price=document.createElement("div");price.className="package-price";price.textContent="₦"+money(p.amount);  
-const details=document.createElement("p");details.textContent="Simulated total return: ₦"+money(p.totalReturn)+" | Duration: "+p.days+" days";  
-const note=document.createElement("p");note.className="small";note.textContent="Invest only..";  
-const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled = !unlocked;
-btn.disabled = true;
-  btn.disabled = false;
-  try {
-    await startInvestment(p.id);
-  } catch (error) {
-    console.error("Start package error:", error);
-    alert(error.message || "Could not start package.");
-  } finally {
-    btn.disabled = false;
-  }
-};
-div.append(name,price,details,note,btn);box.appendChild(div);  
-});  
-await loadMyInvestments();  
-}  
+async function loadInvestmentPage(){
+  if(!currentUser)return;
 
+  await loadInvestmentSettings();
+
+  const balance=Number(myProfile.InvestBalance||0);
+  el("InvestBalance").textContent=money(balance);
+
+  el("investAccessMessage").textContent=
+    "Investment packages are currently unavailable.";
+
+  const box=el("investmentPackages");
+  box.innerHTML="";
+
+  investPackages.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="package-card";
+
+    const name=document.createElement("h3");
+    name.textContent=p.name;
+
+    const price=document.createElement("div");
+    price.className="package-price";
+    price.textContent="₦"+money(p.amount);
+
+    const details=document.createElement("p");
+    details.textContent=
+      "Total return: ₦"+money(p.totalReturn)+
+      " | Duration: "+p.days+" days";
+
+    const note=document.createElement("p");
+    note.className="small";
+    note.textContent="";
+
+    const btn=document.createElement("button");
+    btn.textContent="Start Package";
+    btn.disabled=true;
+
+    div.append(name,price,details,note,btn);
+    box.appendChild(div);
+  });
+
+  await loadMyInvestments();
+}
 async function startInvestment(packageId) {
   if (!currentUser) {
     alert("Please log in first.");
