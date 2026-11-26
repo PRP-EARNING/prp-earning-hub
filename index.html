@@ -716,7 +716,7 @@ const price=document.createElement("div");price.className="package-price";price.
 const details=document.createElement("p");details.textContent="Simulated total return: ₦"+money(p.totalReturn)+" | Duration: "+p.days+" days";  
 const note=document.createElement("p");note.className="small";note.textContent="Invest only..";  
 const btn=document.createElement("button");btn.textContent="Start Package";btn.disabled = !unlocked;
-btn.onclick = async () => {
+btn.disabled = true;
   btn.disabled = false;
   try {
     await startInvestment(p.id);
@@ -832,7 +832,42 @@ const status=document.createElement("p");status.className="status-approved";stat
 const claimed=document.createElement("p");claimed.textContent="Total rewards claimed: ₦"+money(v.claimedTotal||0);  
 div.append(title,info,status,claimed);historyBox.appendChild(div);  
 });  
-if(!activeBox.children.length)activeBox.textContent="No active investments.";  
+ pending.forEach(v => {
+  const div = document.createElement("div");
+  div.className = "item";
+
+  const title = document.createElement("h3");
+  title.textContent = v.packageName || "Package";
+
+  const amount = document.createElement("p");
+  amount.textContent = "Package amount: ₦" + money(v.principal);
+
+  const status = document.createElement("p");
+  status.className = "status-pending";
+  status.textContent = "PENDING ADMIN APPROVAL";
+
+  div.append(title, amount, status);
+  activeBox.appendChild(div);
+});
+
+if (!activeBox.children.length) {
+  activeBox.textContent = "No active or pending investments.";
+}
+
+rejected.forEach(v => {
+  const div = document.createElement("div");
+  div.className = "item";
+
+  const title = document.createElement("h3");
+  title.textContent = v.packageName || "Package";
+
+  const status = document.createElement("p");
+  status.className = "status-rejected";
+  status.textContent = "REQUEST REJECTED — No wallet deduction.";
+
+  div.append(title, status);
+  historyBox.appendChild(div);
+});
 if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";  
 }catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent=e.message}  
 }  
