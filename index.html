@@ -221,7 +221,11 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <div id="submissionList"></div>  
 <hr><h3>Deposits to Review</h3><div id="depositAdminList"></div>  
 <hr><h3>Withdrawal Requests</h3><div id="withdrawalAdminList"></div>  <hr>  
-<h3>Investment Settings</h3>  
+<hr>
+<h3>Pending Package Requests</h3>
+<p class="small">Review users' package requests. Approval deducts the package amount from the user's investment wallet.</p>
+<div id="pendingInvestmentList">Loading requests...</div>
+  <h3>Investment Settings</h3>  
 <p class="small">Change package investment. Changes apply to new investments only.</p>  
 <div id="adminInvestmentSettings">Loading settings...</div>  
 <button class="page-button" onclick="saveAdminInvestmentSettings()">Save Investment Settings</button>  
@@ -474,7 +478,10 @@ const status=document.createElement("p");status.className=s.status==="approved"?
 }  
 submissionBox.appendChild(div);  
 });  
-await loadDepositAdmin();await loadWithdrawalAdmin();await loadAdminInvestmentSettings();  
+ await loadDepositAdmin();
+await loadWithdrawalAdmin();
+await loadPendingInvestments();
+await loadAdminInvestmentSettings();
 }catch(e){taskBox.textContent=e.message;submissionBox.textContent=e.message}  
 }  
 async function clearReviewedSubmissions(type){  
@@ -788,8 +795,19 @@ activeBox.textContent="Loading...";historyBox.textContent="Loading...";
 try{  
 const snap=await db.collection("investments").where("userId","==",currentUser.uid).get();  
 activeBox.innerHTML="";historyBox.innerHTML="";  
-const active=[],finished=[];  
-snap.forEach(d=>{const v={id:d.id,...d.data()};if(v.status==="active")active.push(v);else finished.push(v)});  
+const active = [];
+const pending = [];
+const finished = [];
+const rejected = [];
+
+snap.forEach(d => {
+  const v = {id: d.id, ...d.data()};
+
+  if (v.status === "active") active.push(v);
+  else if (v.status === "pending") pending.push(v);
+  else if (v.status === "rejected") rejected.push(v);
+  else finished.push(v);
+});
 active.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));  
 finished.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));  
 active.forEach(v=>{  
@@ -848,6 +866,182 @@ completedAt:newClaimed>=days?firebase.firestore.FieldValue.serverTimestamp():nul
 await loadProfile();await loadInvestmentPage();alert("reward added to your wallet.");  
 }catch(e){alert(e.message);button.disabled=false;button.textContent="Claim Reward"}  
 }  
+  
+/* PENDING INVESTMENT REQUESTS */
+async function loadPendingInvestments() {
+  if (!isAdmin) return;
+
+  const box = el("pendingInvestmentList");
+  box.textContent = "Loading pending requests...";
+
+  try {
+    const snap = await db.collection("investments")
+      .where("status", "==", "pending")
+      .get();
+
+    box.innerHTML = "";
+
+    if (snap.empty) {
+      box.textContent = "No pending package requests.";
+      return;
+    }
+
+    snap.forEach(doc => {
+      const v = doc.data();
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const title = document.createElement("h3");
+      title.textContent = v.packageName || "Investment Package";
+
+      const info = document.createElement("p");
+      info.textContent =
+        "User: " + (v.email || v.userId) +
+        "\nPackage: " + (v.packageId || "N/A") +
+        "\nAmount: ₦" + money(v.principal) +
+        "\nSimulated total: ₦" + money(v.totalReturn) +
+        "\nDuration: " + Number(v.duration || 0) + " days";
+
+      info.style.whiteSpace = "pre-wrap";
+
+      const status = document.createElement("p");
+      status.className = "status-pending";
+      status.textContent = "STATUS: PENDING";
+
+      const approve = document.createElement("button");
+      approve.textContent = "Approve & Deduct Wallet";
+      approve.onclick = () => approveInvestment(doc.id, approve);
+
+      const reject = document.createElement("button");
+      reject.textContent = "Reject Request";
+      reject.className = "danger";
+      reject.onclick = () => rejectInvestment(doc.id, reject);
+
+      div.append(title, info, status, approve, reject);
+      box.appendChild(div);
+    });
+
+  } catch (e) {
+    box.textContent = "Could not load requests: " + e.message;
+  }
+}
+
+async function approveInvestment(id, button) {
+  if (!isAdmin) return alert("Admin access required.");
+
+  if (!confirm(
+    "Approve this package? The package amount will be deducted from the user's investment wallet."
+  )) return;
+
+  if (button.disabled) return;
+
+  button.disabled = true;
+  button.textContent = "Processing...";
+
+  try {
+    const investmentRef = db.collection("investments").doc(id);
+
+    await db.runTransaction(async tx => {
+      const investmentSnap = await tx.get(investmentRef);
+
+      if (!investmentSnap.exists) {
+        throw new Error("Package request not found.");
+      }
+
+      const investment = investmentSnap.data();
+
+      if (investment.status !== "pending") {
+        throw new Error("This request has already been reviewed.");
+      }
+
+      const userRef = db.collection("users").doc(investment.userId);
+      const userSnap = await tx.get(userRef);
+
+      if (!userSnap.exists) {
+        throw new Error("User account not found.");
+      }
+
+      const amount = Number(investment.principal);
+      const balance = Number(userSnap.data().InvestBalance || 0);
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("Invalid package amount.");
+      }
+
+      if (balance < amount) {
+        throw new Error("User has insufficient investment wallet balance. Request remains pending.");
+      }
+
+      // Deduct once and activate the package in the same transaction.
+      tx.update(userRef, {
+        InvestBalance: balance - amount
+      });
+
+      tx.update(investmentRef, {
+        status: "active",
+        claimedDays: 0,
+        claimedTotal: 0,
+        startAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastClaimAt: null,
+        approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        approvedBy: currentUser.uid
+      });
+    });
+
+    alert("Package approved. Wallet deducted and package activated.");
+
+    await loadPendingInvestments();
+    await loadProfile();
+    await loadInvestmentPage();
+
+  } catch (e) {
+    alert("Approval failed: " + e.message);
+    button.disabled = false;
+    button.textContent = "Approve & Deduct Wallet";
+  }
+}
+
+async function rejectInvestment(id, button) {
+  if (!isAdmin) return alert("Admin access required.");
+
+  if (!confirm("Are you sure you want to reject this package request?")) {
+    return;
+  }
+
+  if (button.disabled) return;
+
+  button.disabled = true;
+  button.textContent = "Processing...";
+
+  try {
+    const ref = db.collection("investments").doc(id);
+
+    await db.runTransaction(async tx => {
+      const snap = await tx.get(ref);
+
+      if (!snap.exists || snap.data().status !== "pending") {
+        throw new Error("This request has already been reviewed.");
+      }
+
+      tx.update(ref, {
+        status: "rejected",
+        reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        reviewedBy: currentUser.uid
+      });
+    });
+
+    alert("Package request rejected. No wallet deduction was made.");
+
+    await loadPendingInvestments();
+    await loadInvestmentPage();
+
+  } catch (e) {
+    alert("Rejection failed: " + e.message);
+    button.disabled = false;
+    button.textContent = "Reject Request";
+  }
+}
+
   
 /* ADMIN SETTINGS */  
 async function loadAdminInvestmentSettings(){  
