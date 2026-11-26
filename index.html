@@ -807,96 +807,131 @@ async function startInvestment(packageId) {
     alert(error.message);
   }
 }
-
-// <--- PASTE THE COMBINED CODE RIGHT HERE!
-
-async function loadMyInvestments(){  
-if(!currentUser)return;  
-const activeBox=el("activeInvestments"),historyBox=el("investmentHistory");
-
-async function loadMyInvestments(){  
-if(!currentUser)return;  
-const activeBox=el("activeInvestments"),historyBox=el("investmentHistory");  
-activeBox.textContent="Loading...";historyBox.textContent="Loading...";  
-try{  
-const snap=await db.collection("investments").where("userId","==",currentUser.uid).get();  
-activeBox.innerHTML="";historyBox.innerHTML="";  
-const active = [];
-const pending = [];
-const finished = [];
-const rejected = [];
-
-snap.forEach(d => {
-  const v = {id: d.id, ...d.data()};
-
-  if (v.status === "active") active.push(v);
-  else if (v.status === "pending") pending.push(v);
-  else if (v.status === "rejected") rejected.push(v);
-  else finished.push(v);
-});
-active.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));  
-finished.sort((a,b)=>getTimestampMillis(b.createdAt)-getTimestampMillis(a.createdAt));  
-active.forEach(v=>{  
-const div=document.createElement("div");div.className="item";  
-const title=document.createElement("h3");title.textContent=v.packageName||"invest Package";  
-const info=document.createElement("p");info.textContent=" amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);  
-const days=document.createElement("p");days.textContent="Progress: "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";  
-const percent=Math.min(100,(Number(v.claimedDays||0)/Math.max(1,Number(v.duration||7)))*100);  
-const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("div");fill.style.width=percent+"%";bar.appendChild(fill);  
-const last=getTimestampMillis(v.lastClaimAt)||getTimestampMillis(v.startAt);  
-const remaining=last+86400000-Date.now();  
-const timer=document.createElement("p");timer.className="small";timer.textContent=remaining<=0?"claim: Available now":"Next claim in: "+formatRemaining(remaining);  
-const claimed=document.createElement("p");claimed.textContent="rewards claimed: ₦"+money(v.claimedTotal||0);  
-const btn=document.createElement("button");btn.textContent=remaining<=0?"Claim Reward":"Claim Not Ready";btn.disabled=remaining>0;btn.onclick=()=>claimReward(v.id,btn);  
-div.append(title,info,days,bar,claimed,timer,btn);activeBox.appendChild(div);  
-});  
-finished.forEach(v=>{  
-const div=document.createElement("div");div.className="item";  
-const title=document.createElement("h3");title.textContent=v.packageName||"Package";  
-const info=document.createElement("p");info.textContent="amount: ₦"+money(v.principal)+" | Simulated total: ₦"+money(v.totalReturn);  
-const status=document.createElement("p");status.className="status-approved";status.textContent="COMPLETED • "+Number(v.claimedDays||0)+"/"+Number(v.duration||7)+" days";  
-const claimed=document.createElement("p");claimed.textContent="Total rewards claimed: ₦"+money(v.claimedTotal||0);  
-div.append(title,info,status,claimed);historyBox.appendChild(div);  
-});  
- pending.forEach(v => {
-  const div = document.createElement("div");
-  div.className = "item";
-
-  const title = document.createElement("h3");
-  title.textContent = v.packageName || "Package";
-
-  const amount = document.createElement("p");
-  amount.textContent = "Package amount: ₦" + money(v.principal);
-
-  const status = document.createElement("p");
-  status.className = "status-pending";
-  status.textContent = "PENDING ADMIN APPROVAL";
-
-  div.append(title, amount, status);
-  activeBox.appendChild(div);
-});
-
-if (!activeBox.children.length) {
-  activeBox.textContent = "No active or pending investments.";
+function getTimestampMillis(value) {
+  if (!value) return 0;
+  if (typeof value.toMillis === "function") return value.toMillis();
+  if (typeof value.seconds === "number") return value.seconds * 1000;
+  const parsed = new Date(value).getTime();
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
-rejected.forEach(v => {
-  const div = document.createElement("div");
-  div.className = "item";
+function formatRemaining(ms) {
+  if (ms <= 0) return "0h 0m 0s";
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return hours + "h " + minutes + "m " + seconds + "s";
+}
 
-  const title = document.createElement("h3");
-  title.textContent = v.packageName || "Package";
+async function loadMyInvestments() {
+  if (!currentUser) return;
+  const activeBox = el("activeInvestments"), historyBox = el("investmentHistory");
+  activeBox.textContent = "Loading...";
+  historyBox.textContent = "Loading...";
+  try {
+    const snap = await db.collection("investments").where("userId", "==", currentUser.uid).get();
+    activeBox.innerHTML = "";
+    historyBox.innerHTML = "";
+    const active = [];
+    const pending = [];
+    const finished = [];
+    const rejected = [];
 
-  const status = document.createElement("p");
-  status.className = "status-rejected";
-  status.textContent = "REQUEST REJECTED — No wallet deduction.";
+    snap.forEach(d => {
+      const v = { id: d.id, ...d.data() };
+      if (v.status === "active") active.push(v);
+      else if (v.status === "pending") pending.push(v);
+      else if (v.status === "rejected") rejected.push(v);
+      else finished.push(v);
+    });
 
-  div.append(title, status);
-  historyBox.appendChild(div);
-});
-if(!historyBox.children.length)historyBox.textContent="No completed investments yet.";  
-}catch(e){activeBox.textContent="Could not load investments: "+e.message;historyBox.textContent=e.message}  
-}  
+    active.sort((a, b) => getTimestampMillis(b.createdAt) - getTimestampMillis(a.createdAt));
+    finished.sort((a, b) => getTimestampMillis(b.createdAt) - getTimestampMillis(a.createdAt));
+
+    active.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "item";
+      const title = document.createElement("h3");
+      title.textContent = v.packageName || "invest Package";
+      const info = document.createElement("p");
+      info.textContent = " amount: ₦" + money(v.principal) + " | Simulated total: ₦" + money(v.totalReturn);
+      const days = document.createElement("p");
+      days.textContent = "Progress: " + Number(v.claimedDays || 0) + "/" + Number(v.duration || 7) + " days";
+      const percent = Math.min(100, (Number(v.claimedDays || 0) / Math.max(1, Number(v.duration || 7))) * 100);
+      const bar = document.createElement("div");
+      bar.className = "progress";
+      const fill = document.createElement("div");
+      fill.style.width = percent + "%";
+      bar.appendChild(fill);
+      const last = getTimestampMillis(v.lastClaimAt) || getTimestampMillis(v.startAt);
+      const remaining = last + 86400000 - Date.now();
+      const timer = document.createElement("p");
+      timer.className = "small";
+      timer.textContent = remaining <= 0 ? "claim: Available now" : "Next claim in: " + formatRemaining(remaining);
+      const claimed = document.createElement("p");
+      claimed.textContent = "rewards claimed: ₦" + money(v.claimedTotal || 0);
+      const btn = document.createElement("button");
+      btn.textContent = remaining <= 0 ? "Claim Reward" : "Claim Not Ready";
+      btn.disabled = remaining > 0;
+      btn.onclick = () => claimReward(v.id, btn);
+      div.append(title, info, days, bar, claimed, timer, btn);
+      activeBox.appendChild(div);
+    });
+
+    finished.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "item";
+      const title = document.createElement("h3");
+      title.textContent = v.packageName || "Package";
+      const info = document.createElement("p");
+      info.textContent = "amount: ₦" + money(v.principal) + " | Simulated total: ₦" + money(v.totalReturn);
+      const status = document.createElement("p");
+      status.className = "status-approved";
+      status.textContent = "COMPLETED • " + Number(v.claimedDays || 0) + "/" + Number(v.duration || 7) + " days";
+      const claimed = document.createElement("p");
+      claimed.textContent = "Total rewards claimed: ₦" + money(v.claimedTotal || 0);
+      div.append(title, info, status, claimed);
+      historyBox.appendChild(div);
+    });
+
+    pending.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "item";
+      const title = document.createElement("h3");
+      title.textContent = v.packageName || "Package";
+      const amount = document.createElement("p");
+      amount.textContent = "Package amount: ₦" + money(v.principal);
+      const status = document.createElement("p");
+      status.className = "status-pending";
+      status.textContent = "PENDING ADMIN APPROVAL";
+      div.append(title, amount, status);
+      activeBox.appendChild(div);
+    });
+
+    if (!activeBox.children.length) {
+      activeBox.textContent = "No active or pending investments.";
+    }
+
+    rejected.forEach(v => {
+      const div = document.createElement("div");
+      div.className = "item";
+      const title = document.createElement("h3");
+      title.textContent = v.packageName || "Package";
+      const status = document.createElement("p");
+      status.className = "status-rejected";
+      status.textContent = "REQUEST REJECTED — No wallet deduction.";
+      div.append(title, status);
+      historyBox.appendChild(div);
+    });
+
+    if (!historyBox.children.length) historyBox.textContent = "No completed investments yet.";
+  } catch (e) {
+    activeBox.textContent = "Could not load investments: " + e.message;
+    historyBox.textContent = e.message;
+  }
+}
+
 async function claimReward(id,button){  
 if(!currentUser||button.disabled)return;  
 button.disabled=true;button.textContent="Checking...";  
