@@ -697,8 +697,10 @@ if(!currentUser)return;
 await loadInvestmentSettings();  
 const balance=Number(myProfile.InvestBalance||0);  
 el("InvestBalance").textContent=money(balance);  
-const unlocked = !!currentUser && myProfile.taskAccess === true;
-el("investAccessMessage").textContent=unlocked?"Your investment feature is available.":"investment is locked until your account deposit has been approved.";  
+const unlocked = !!currentUser;
+el("investAccessMessage").textContent = unlocked
+? "You can start any available package."
+: "Please log in to start a package.";
 const box=el("investmentPackages");box.innerHTML="";  
 investPackages.forEach(p=>{  
 const div=document.createElement("div");div.className="package-card";  
@@ -723,9 +725,7 @@ div.append(name,price,details,note,btn);box.appendChild(div);
 await loadMyInvestments();  
 }  
 async function startInvestment(packageId){  
-if(!currentUser)return;  
-if(!currentUser || myProfile.taskAccess !== true)
-return alert("Your investment feature is locked.");
+if(!currentUser)return alert("Please log in first.");
 const p=investPackages.find(x=>x.id===packageId);if(!p)return alert("Package not found.");  
 if(!confirm("Start this Invest package using your  wallet."))return;  
 try{  
