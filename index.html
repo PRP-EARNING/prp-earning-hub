@@ -168,9 +168,9 @@ button.outline{background:transparent;color:var(--green);border:1px solid var(--
 <h3>Deposit / Unlock Tasks</h3>  
 <div class="notice">Submit your sender name and wait for admin approval before accessing available tasks. Approval should only happen after actual payment verification.</div>  
 <h3>Payment Details</h3>  
-<p>Deposit Amount: <strong>₦1500</strong></p><p>Bank: <strong>Momo PSB</strong></p>  
-<p>Account Number:</p><h2 class="green">0884321892</h2>  
-<p>Account Name: <strong>Patience</strong></strong></p>  
+<p>Deposit Amount: <strong>₦1500</strong></p><p>Bank: <strong>Opay</strong></p>  
+<p>Account Number:</p><h2 class="green">9110030336</h2>  
+<p>Account Name: <strong>Emmanuel nweke</strong></strong></p>  
 <button class="page-button" onclick="copyDepositAccount()">Copy Account Number</button>  
 <hr><h3>Submit Deposit</h3>  
 <input id="DepositAmount" type="number" min="1" placeholder="Amount deposited (₦)">  
@@ -535,7 +535,7 @@ async function copyText(value,label){
 try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);alert(label+" copied.")}else window.prompt("Copy "+label+":",value)}  
 catch(e){window.prompt("Copy "+label+":",value)}  
 }  
-async function copyDepositAccount(){await copyText("0884321892","Account number")}  
+async function copyDepositAccount(){await copyText("9110030336","Account number")}  
 async function copyAdminNumber(){await copyText("08072081438","Admin number")}  
   
 /* DEPOSITS */  
